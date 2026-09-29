@@ -76,13 +76,18 @@ Set-Location E:/文献/近两三年的故障诊断文献/rbop_diagnosis_v4
 
 完整复现命令骨架见版本3 §12（`--reprs/--alignment_modes/--keys_only/--arms/--pseudo_*` 为 v4 新增 CLI）。
 
+AdaBN 已接入主通路（train.py）：`--bn_adapt [--bn_adapt_scope all|frontend] [--bn_adapt_passes N]`，
+评估前用目标无标签适配集重估 BN running stats，结果写入 results.json 的 `bn_adapt_on/scope/passes`。
+只支持 transductive，且与 `--control target_only` 互斥。旁路脚本 `scripts/adabn_eval.py` 仍可对既有 ckpt 做成对扫描。
+
 ## 7. run 命名与 results.json schema 摘要
 
 - run 名：`T1_s{seed}_{split_mode}_{protocol}[_poolr{p}]_lr{r}_lam{l}_{control}_L{seg}_{repr}[_{tag}]`
   （`lr` 指 label_ratio、`lam` 指 MMD 权重，均**不是学习率**）。
 - `runs/natural/` 与 `runs/paired/` 严格分写，**不得混表**；禁止删 run 重跑。
 - results.json 每条含：运行元数据 + 完整文件键 + 表征与模型（`input_repr/repr_config/frontend/...`）
-  + 适配与读出（`bn_adapt_*`、记录级 `record_accuracy_hard/soft` 等）+ 指标。详见版本3 §4.5。
+  + 适配与读出（`bn_adapt_*` 由 `--bn_adapt` 主通路填充、记录级 `record_accuracy_hard/soft`、
+  `record_class_recall`（记录级逐类召回）等）+ 指标。详见版本3 §4.5。
 - checkpoint：`schema_version:1`，含 `repr_config` 与 `frontend`；不读旧库 `format_version=2`。
 
 ## 8. seed 规则

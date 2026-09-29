@@ -1,13 +1,12 @@
 # 数据与产物（本地大目录，不进仓库）
 Data/
 cache/
-runs/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# 实验与系统文件
+# 实验权重与系统文件
 *.pt
 *.pth
 *.ckpt
@@ -18,9 +17,16 @@ __pycache__/
 Thumbs.db
 NUL
 
+# runs/ 其余产物：权重不进版本（*.pt 已全局忽略，此处显式声明）
+runs/**/*.pt
+
 # 环境
 .venv/
 venv/
-*.log
 .vscode/
 .idea/
+
+# 日志：默认忽略所有 .log（含 sweep.log 等），但 runs/ 下的 run.log 例外放行。
+# 否定规则必须写在 *.log 之后才能生效（后者覆盖前者）。
+*.log
+!runs/**/run.log

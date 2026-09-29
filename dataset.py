@@ -91,16 +91,21 @@ def read_channel_signal(path, channel):
 # 文件枚举与 T1 数据入口
 # ---------------------------------------------------------------------------
 def parse_label(filename):
-    """从文件名解析 `N`/`B`/`IR`/`OR` 标签。"""
-    filename = str(filename)
-    if "IR" in filename:
-        return "IR"
-    if "OR" in filename:
-        return "OR"
-    if "B" in filename:
-        return "B"
-    if "Normal" in filename:
+    """从文件名解析 `N`/`B`/`IR`/`OR` 标签（基于 stem 前缀精确匹配）。
+
+    只取 `Path(...).stem` 再按故障部位前缀正则判定，避免旧实现 `"B" in filename`
+    这类子串匹配在带目录/盘符的完整路径或异常命名下静默误判（与 `is_028_file`
+    的严谨口径对齐）。CWRU 命名：Normal_*, B00x_*, IR00x_*, OR00x@y_*。
+    """
+    stem = Path(str(filename)).stem
+    if re.match(r"^Normal(?:_|$)", stem):
         return "N"
+    if re.match(r"^IR\d", stem):
+        return "IR"
+    if re.match(r"^OR\d", stem):
+        return "OR"
+    if re.match(r"^B\d", stem):
+        return "B"
     raise ValueError(f"无法识别的文件名: {filename}")
 
 

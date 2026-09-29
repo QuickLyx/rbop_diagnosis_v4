@@ -14,6 +14,8 @@ import time
 from contextlib import contextmanager
 from datetime import datetime
 
+import torch
+
 import dataset as ds
 import preprocessing as pp
 import trainer as tr
@@ -140,12 +142,18 @@ def _cache_dir(args):
 
 
 def _repr_config(args):
-    """按 CLI 参数构造 repr_config；非 vmd 强制 K=1、sort_vmd=False（版本3 §4.6）。"""
+    """按 CLI 参数构造 repr_config；非 vmd 强制 K=1、sort_vmd=False（版本3 §4.6）。
+
+    is_vmd 时 K 才有意义（VMD 模态数）；非 vmd 表征下 build_repr_config 不读 K，
+    统一用单一局部变量 `k` 传参，并对外返回写入 checkpoint/结果的 K=1。
+    """
     kind = args.repr
-    K = args.K if kind in ("vmd", "vmdstats") else 1
+    is_vmd = kind in ("vmd", "vmdstats")
+    k = args.K if is_vmd else 1          # 对外返回与入 checkpoint 的 K；非 vmd 固定 1
     sort_vmd = bool(args.sort_vmd) if kind == "vmd" else False
-    return pp.build_repr_config(kind, seg_len=args.seg_len, K=(args.K if kind in ("vmd", "vmdstats") else 8),
-                                nbin=getattr(args, "nbin", 256), sort_vmd=sort_vmd), K, sort_vmd
+    cfg = pp.build_repr_config(kind, seg_len=args.seg_len, K=k,
+                               nbin=getattr(args, "nbin", 256), sort_vmd=sort_vmd)
+    return cfg, k, sort_vmd
 
 
 def _frontend_name(args):
@@ -238,7 +246,6 @@ def build_model(args, parts):
 
 def compute_class_weights(args, labels):
     """按源域全部训练样本计算 inverse-frequency 类别权重（默认 off）。"""
-    import torch
     if not getattr(args, "class_weight", False):
         return None
     counts = torch.bincount(labels, minlength=len(ds.LABEL_NAMES)).float()
@@ -256,6 +263,109 @@ def _ck_kwargs(args, parts, stage):
         recurrent_layers=args.recurrent_layers, threshold_mode=args.threshold_mode,
         use_se=args.use_se, frontend=_frontend_spec(_frontend_name(args)),
         K=parts["K"], sort_vmd=parts["sort_vmd"])
+
+
+def _resolve_arm(arm, args):
+    """把 P2.2 臂映射为 train_transfer 的参数（版本3 §5 P2.2）。
+
+    返回 dict：freeze_backbone / source_ce / source_ce_weight / lr_transfer。
+      B 臂：冻结 backbone 只训分类头；C 臂：去源 CE；D0.1/D0.3：源 CE 梯度尺度；
+      E 臂：迁移学习率括 1e-3。None=常规。
+    """
+    return {
+        "freeze_backbone": arm == "B",
+        "source_ce": arm != "C",
+        "source_ce_weight": {"D0.1": 0.1, "D0.3": 0.3}.get(arm, 1.0),
+        "lr_transfer": 1e-3 if arm == "E" else args.lr_transfer,
+    }
+
+
+def _maybe_adabn(args, model, parts):
+    """若启用 AdaBN，用目标无标签输入重估 BN 统计（版本3 §5 P0.1）。
+
+    统计源：transductive 下的适配集 X_unlab（即评估文件的 FE 无标签输入）。
+    返回 (bn_adapt_on, scope, passes) 供结果记录；未启用时返回 (False, None, None)。
+    """
+    if not getattr(args, "bn_adapt", False):
+        return False, None, None
+    scope = getattr(args, "bn_adapt_scope", "all")
+    passes = int(getattr(args, "bn_adapt_passes", 1))
+    X_stat = parts["X_unlab"]
+    if X_stat is None or len(X_stat) == 0:
+        raise SystemExit("AdaBN 需要非空目标无标签适配集")
+    print(f"[AdaBN] scope={scope} passes={passes} 统计源=adapt(n={len(X_stat)})")
+    for _ in range(passes):
+        tr.adabn_recompute(model, X_stat, scope=scope)
+    return True, scope, passes
+
+
+def run_target_only(args, parts, run_dir):
+    """target_only 对照：只用目标有标签文件从零训练（版本3 §5）。
+
+    返回 (eval_res, baseline_acc=None, bn_state=(False,None,None))。
+    target_only 无源域/适配语义，不适用 AdaBN（已在 validate_args 拦截）。
+    """
+    if len(parts["X_lab"]) == 0:
+        raise SystemExit("target_only 必须有 label_ratio > 0 的目标有标签文件")
+    model = build_model(args, parts)
+    target_weights = compute_class_weights(args, parts["y_lab"])
+    print(f"[目标从零训练] epochs={args.source_epochs} bs={args.bs}")
+    tr.train_source(model, parts["X_lab"], parts["y_lab"],
+                    epochs=args.source_epochs, bs=args.bs, lr=args.lr_source,
+                    seed=args.seed, class_weights=target_weights)
+    tr.save_checkpoint(os.path.join(run_dir, "target_only.pt"), model,
+                       **_ck_kwargs(args, parts, "target_only"))
+    eval_res = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"],
+                                   record_ids=parts["eval_record_ids"])
+    return eval_res, None, (False, None, None)
+
+
+def run_transfer_pipeline(args, parts, run_dir, control, arm, class_weights):
+    """源域固定训练 → 基线 → （可选）迁移微调 → （可选）AdaBN → 评估。
+
+    返回 (eval_res, baseline_acc, bn_state=(on,scope,passes))。
+    """
+    model = build_model(args, parts)
+    print(f"[阶段一] 源域固定训练 epochs={args.source_epochs} bs={args.bs} "
+          f"lr={args.lr_source} class_weight={'on' if class_weights is not None else 'off'}")
+    tr.train_source(model, parts["Xs_tr"], parts["ys_tr"],
+                    epochs=args.source_epochs, bs=args.bs, lr=args.lr_source,
+                    seed=args.seed, class_weights=class_weights)
+    tr.save_checkpoint(os.path.join(run_dir, "source.pt"), model,
+                       **_ck_kwargs(args, parts, "source"))
+    base = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"])
+    baseline_acc = round(base["accuracy"], 6)
+    print(f"[基线] 不迁移 target FE acc={baseline_acc:.4f}")
+
+    if control == "no_transfer":
+        print("[阶段二] no_transfer：跳过目标微调")
+    else:
+        use_labels = control not in ("zero_label", "pure_mmd")
+        has_lab = use_labels and len(parts["X_lab"]) > 0
+        X_lab = parts["X_lab"] if has_lab else None
+        y_lab = parts["y_lab"] if has_lab else None
+        arm_cfg = _resolve_arm(arm, args)
+        print(f"[阶段二] control={control} arm={arm} epochs={args.transfer_epochs} "
+              f"lr={arm_cfg['lr_transfer']} lam={args.lam} "
+              f"freeze={arm_cfg['freeze_backbone']} source_ce={arm_cfg['source_ce']} "
+              f"src_w={arm_cfg['source_ce_weight']}")
+        tr.train_transfer(
+            model, parts["Xs_tr"], parts["ys_tr"], X_lab, y_lab,
+            parts["X_unlab"] if args.lam != 0 else None,
+            epochs=args.transfer_epochs, bs=args.bs, lr=arm_cfg["lr_transfer"],
+            lam=args.lam, mmd_estimator=args.mmd_estimator,
+            alignment_mode=args.alignment_mode, seed=args.seed,
+            class_weights=class_weights, freeze_backbone=arm_cfg["freeze_backbone"],
+            source_ce=arm_cfg["source_ce"], source_ce_weight=arm_cfg["source_ce_weight"])
+    tr.save_checkpoint(os.path.join(run_dir, "transfer.pt"), model,
+                       **_ck_kwargs(args, parts, "transfer"))
+    # AdaBN（评估前用目标无标签输入重估 BN，版本3 §5 P0.1）
+    bn_state = _maybe_adabn(args, model, parts)
+    eval_res = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"],
+                                   record_ids=parts["eval_record_ids"])
+    print(f"[最终评估] acc={eval_res['accuracy']:.4f} macro-F1={eval_res['macro_f1']:.4f} "
+          f"记录硬={eval_res['record_accuracy_hard']:.4f} 记录软={eval_res['record_accuracy_soft']:.4f}")
+    return eval_res, baseline_acc, bn_state
 
 
 def run_experiment(args):
@@ -291,61 +401,14 @@ def run_experiment(args):
               f"adapt={len(parts['X_unlab'])} eval={len(parts['Xt_eval'])}")
 
         class_weights = compute_class_weights(args, parts["ys_tr"])
-        baseline_acc = None
-        eval_res = None
 
         if control == "target_only":
-            if len(parts["X_lab"]) == 0:
-                raise SystemExit("target_only 必须有 label_ratio > 0 的目标有标签文件")
-            model = build_model(args, parts)
-            target_weights = compute_class_weights(args, parts["y_lab"])
-            print(f"[目标从零训练] epochs={args.source_epochs} bs={args.bs}")
-            tr.train_source(model, parts["X_lab"], parts["y_lab"],
-                            epochs=args.source_epochs, bs=args.bs, lr=args.lr_source,
-                            seed=args.seed, class_weights=target_weights)
-            tr.save_checkpoint(os.path.join(run_dir, "target_only.pt"), model,
-                               **_ck_kwargs(args, parts, "target_only"))
-            eval_res = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"],
-                                           record_ids=parts["eval_record_ids"])
+            eval_res, baseline_acc, bn_state = run_target_only(
+                args, parts, run_dir)
         else:
-            model = build_model(args, parts)
-            print(f"[阶段一] 源域固定训练 epochs={args.source_epochs} bs={args.bs} "
-                  f"lr={args.lr_source} class_weight={'on' if class_weights is not None else 'off'}")
-            tr.train_source(model, parts["Xs_tr"], parts["ys_tr"],
-                            epochs=args.source_epochs, bs=args.bs, lr=args.lr_source,
-                            seed=args.seed, class_weights=class_weights)
-            tr.save_checkpoint(os.path.join(run_dir, "source.pt"), model,
-                               **_ck_kwargs(args, parts, "source"))
-            base = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"])
-            baseline_acc = round(base["accuracy"], 6)
-            print(f"[基线] 不迁移 target FE acc={baseline_acc:.4f}")
-
-            if control == "no_transfer":
-                print("[阶段二] no_transfer：跳过目标微调")
-            else:
-                use_labels = control not in ("zero_label", "pure_mmd")
-                X_lab = parts["X_lab"] if use_labels and len(parts["X_lab"]) > 0 else None
-                y_lab = parts["y_lab"] if use_labels and len(parts["X_lab"]) > 0 else None
-                # P2.2 臂映射（版本3 §5 P2.2）
-                freeze = (arm == "B")
-                source_ce = (arm != "C")
-                src_w = {"D0.1": 0.1, "D0.3": 0.3}.get(arm, 1.0)
-                lr_t = 1e-3 if arm == "E" else args.lr_transfer
-                print(f"[阶段二] control={control} arm={arm} epochs={args.transfer_epochs} "
-                      f"lr={lr_t} lam={args.lam} freeze={freeze} source_ce={source_ce} src_w={src_w}")
-                tr.train_transfer(
-                    model, parts["Xs_tr"], parts["ys_tr"], X_lab, y_lab,
-                    parts["X_unlab"] if args.lam != 0 else None,
-                    epochs=args.transfer_epochs, bs=args.bs, lr=lr_t, lam=args.lam,
-                    mmd_estimator=args.mmd_estimator, alignment_mode=args.alignment_mode,
-                    seed=args.seed, class_weights=class_weights,
-                    freeze_backbone=freeze, source_ce=source_ce, source_ce_weight=src_w)
-            tr.save_checkpoint(os.path.join(run_dir, "transfer.pt"), model,
-                               **_ck_kwargs(args, parts, "transfer"))
-            eval_res = tr.evaluate_details(model, parts["Xt_eval"], parts["yt_eval"],
-                                           record_ids=parts["eval_record_ids"])
-            print(f"[最终评估] acc={eval_res['accuracy']:.4f} macro-F1={eval_res['macro_f1']:.4f} "
-                  f"记录硬={eval_res['record_accuracy_hard']:.4f} 记录软={eval_res['record_accuracy_soft']:.4f}")
+            eval_res, baseline_acc, bn_state = run_transfer_pipeline(
+                args, parts, run_dir, control, arm, class_weights)
+        bn_adapt_on, bn_adapt_scope, bn_adapt_passes = bn_state
 
         per_file = eval_res.get("per_file_detail", {})
         record = {
@@ -380,11 +443,12 @@ def run_experiment(args):
             "lam": args.lam, "alignment_mode": args.alignment_mode,
             "mmd_estimator": args.mmd_estimator,
             "class_weight": "on" if class_weights is not None else "off", "arm": arm,
-            "bn_adapt_on": None, "bn_adapt_scope": None, "bn_adapt_passes": None,
+            "bn_adapt_on": bn_adapt_on, "bn_adapt_scope": bn_adapt_scope,
+            "bn_adapt_passes": bn_adapt_passes,
             "record_accuracy_hard": eval_res.get("record_accuracy_hard"),
             "record_accuracy_soft": eval_res.get("record_accuracy_soft"),
             "record_macro_f1": eval_res.get("record_macro_f1"),
-            "record_class_recall": None,
+            "record_class_recall": eval_res.get("record_class_recall"),
             "per_file_accuracy": {k: v["acc_hard"] for k, v in per_file.items()},
             "per_file_support": {k: v["support"] for k, v in per_file.items()},
             "per_file_pred": {k: v["pred_hard"] for k, v in per_file.items()},

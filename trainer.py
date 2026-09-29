@@ -104,7 +104,7 @@ def evaluate_details(model, X, y, bs=256, record_ids=None):
 
 def _record_level_metrics(probs, pred, true, record_ids):
     """记录等权的硬/软投票指标（版本3 §P1.1/P1.2）。硬软分别，不混淆。"""
-    from sklearn.metrics import f1_score
+    from sklearn.metrics import confusion_matrix, f1_score
 
     rec_hard_pred, rec_soft_pred, rec_true = [], [], []
     per_file = {}
@@ -125,11 +125,18 @@ def _record_level_metrics(probs, pred, true, record_ids):
     labels = np.arange(probs.shape[1])
     # 记录级低于 0.5 的记录数（版本3 §P1.2）——记录级单条命中为 0/1，这里统计错误记录数
     n_wrong_hard = int((rec_hard_pred != rec_true).sum())
+    # 记录级逐类 recall（硬投票）：对角线 / 真实支撑，支撑为 0 的类记 0.0
+    rec_cm = confusion_matrix(rec_true, rec_hard_pred, labels=labels)
+    rec_support = rec_cm.sum(axis=1)
+    rec_recall = np.divide(np.diag(rec_cm), rec_support,
+                           out=np.zeros(len(labels), dtype=float),
+                           where=rec_support != 0)
     return {
         "record_accuracy_hard": float((rec_hard_pred == rec_true).mean()),
         "record_accuracy_soft": float((rec_soft_pred == rec_true).mean()),
         "record_macro_f1": float(f1_score(rec_true, rec_hard_pred, labels=labels,
                                           average="macro", zero_division=0)),
+        "record_class_recall": rec_recall.tolist(),
         "record_n_wrong_hard": n_wrong_hard,
         "record_n_total": int(len(rec_true)),
         "per_file_detail": per_file,
@@ -178,6 +185,10 @@ def train_transfer(model, X_s, y_s, X_lab=None, y_lab=None, X_unlab=None,
       source_ce=False → 去源 CE、保留 MMD 与 backbone 训练（C 臂，MMD 仍需源域前向取 feat_s/y_s）；
       source_ce_weight∈{0.1,0.3} → D 臂（源 CE 梯度尺度）。
     返回 (ce_src, ce_tgt, mmd) 三个批均损失。
+
+    注意：一个 epoch 的长度由**源域** source_loader 定义（源域 13191 段）。目标有标签/
+    无标签 loader 通过 `_next_batch` 循环复用，因此目标池（远小于源域）在一个 epoch 内会
+    被反复重扫多次。这是工程折中：MMD 的源/目标 batch 成对数以源域 batch 数为准。
     """
     if X_s is None or len(X_s) == 0:
         raise ValueError("源域训练集为空")

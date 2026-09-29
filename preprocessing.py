@@ -23,6 +23,7 @@ repr_key 含完整参数（如 logspec_hanning_nbin256_log1e-9_std1）。
 数据流形状：SegmentSet.signals (N,L) → extract_repr → (N, C, D)（vmd 为 (N,K,L)，
 其余为 (N,1,dim)）；build_feature_set 返回 (torch (N,C,D), y (N,), rows (N,))。
 """
+import json
 import os
 from pathlib import Path
 
@@ -236,7 +237,6 @@ def _config_matches(cached_cfg, cfg):
 
 def _load_cached(cache_file, labels, segment_ids, cfg, channel, cache_key):
     """读取并校验单文件缓存，防止只按行数误命中。校验 shape/标签/段号/通道/键/repr_config。"""
-    import json
     with np.load(cache_file, allow_pickle=False) as data:
         X = np.asarray(data["X"])
         y = np.asarray(data["y"])
@@ -268,7 +268,6 @@ def build_feature_set(segments, file_keys, channel, cfg, cache_dir=CACHE_DIR,
     返回 (X torch (N,C,D) float32, y torch (N,) long, rows (N,) 分段行号)。
     vmd 表征在读出所有文件后按 cfg['sort_vmd'] 排序（排序不写回缓存，见 §4.3）。
     """
-    import json
     if channel not in ("DE", "FE"):
         raise ValueError(f"未知通道: {channel}")
     if segments.signals.shape[1] != cfg["seg_len"]:

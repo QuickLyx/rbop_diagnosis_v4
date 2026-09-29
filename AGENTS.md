@@ -39,6 +39,8 @@
 schema 与命名（版本3 §4.5/§4.6）：
 - checkpoint `schema_version:1`，`repr_config` 全量入键与 checkpoint；`frontend` 名入 checkpoint。
 - 非 vmd 表征时 `--K` 固定 1、`--sort_vmd` 强制 False。
+- AdaBN 在主通路：`--bn_adapt`（默认 off）+ `--bn_adapt_scope {all,frontend}` + `--bn_adapt_passes N`，只支持 transductive、与 target_only 互斥；开启后 results.json 的 `bn_adapt_on/scope/passes` 必须如实记录。
+- MMD 默认固定核带宽 `(1,5,10)`（`gaussian_kernel` 默认 `sigma`），是主格冻结配方，勿改；`sigma="median"`（median heuristic）仅作对照研究入口，实测显著劣于固定带宽（paired transductive pool0.5/lr0.99/lam0.3/logspec seed0 段级 −7.9pp），不要当默认。
 - run 名：`T1_s{seed}_{split_mode}_{protocol}[_poolr{p}]_lr{r}_lam{l}_{control}_L{seg}_{repr}[_{tag}]`；
   `lr`=label_ratio、`lam`=MMD 权重，均不是学习率。
 - `runs/natural/` 与 `runs/paired/` 严格分写；禁止删 run 重跑；禁止把自然划分结果复制到 paired。

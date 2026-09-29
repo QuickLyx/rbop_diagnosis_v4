@@ -70,6 +70,27 @@ class TestMMD(unittest.TestCase):
         c = torch.randn(64, 32) + 3.0
         self.assertLess(M.mmd_loss(a, b).item(), M.mmd_loss(a, c).item())
 
+    def test_gaussian_kernel_default_is_fixed_bandwidth(self):
+        """默认 sigma=(1,5,10) 固定多核，与显式传入逐位一致（冻结配方，勿改）。"""
+        x, y = torch.randn(8, 16), torch.randn(8, 16)
+        k_def = M.gaussian_kernel(x, y)
+        k_fix = M.gaussian_kernel(x, y, sigma=(1, 5, 10))
+        self.assertTrue(torch.allclose(k_def, k_fix))
+        self.assertEqual(k_def.shape, (8, 8))
+        self.assertTrue(bool((k_def > 0).all() and (k_def <= 1).all()))
+
+    def test_gaussian_kernel_median_option_and_reject(self):
+        """sigma='median' 作对照入口可用；未知选项报错。"""
+        x, y = torch.randn(8, 16), torch.randn(8, 16)
+        k_med = M.gaussian_kernel(x, y, sigma="median")
+        self.assertEqual(k_med.shape, (8, 8))
+        self.assertTrue(torch.isfinite(k_med).all())
+        # 对角线 k(x,x)=exp(0)=1（unbiased 减 count 的前提）
+        diag = M.gaussian_kernel(x, x, sigma="median")
+        self.assertTrue(torch.allclose(torch.diag(diag), torch.ones(8), atol=1e-6))
+        with self.assertRaises(ValueError):
+            M.gaussian_kernel(x, y, sigma="rbf")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

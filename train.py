@@ -53,6 +53,13 @@ def build_parser():
     ap.add_argument("--threshold_mode", choices=["signed_mean", "mean_abs", "rms"],
                     default="signed_mean")
     ap.add_argument("--use_se", action=argparse.BooleanOptionalAction, default=True)
+    # AdaBN（版本3 §5 P0.1）：训练后用无标签目标输入重估 BN running stats
+    ap.add_argument("--bn_adapt", action="store_true",
+                    help="启用 AdaBN：评估前用目标无标签输入重估 BatchNorm 统计")
+    ap.add_argument("--bn_adapt_scope", choices=["all", "frontend"], default="all",
+                    help="AdaBN 重估范围：all=全部 BN，frontend=仅前端 3 个")
+    ap.add_argument("--bn_adapt_passes", type=int, default=1,
+                    help="AdaBN 重估遍数")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--runs_dir", default=None)
     ap.add_argument("--run_name", default=None)
@@ -88,6 +95,13 @@ def validate_args(args):
         args.runs_dir = os.path.join(ex.RUNS_DIR, args.split_mode)
     if args.lam < 0:
         raise SystemExit("--lam 必须非负")
+    if args.bn_adapt:
+        if args.protocol != "transductive":
+            raise SystemExit("AdaBN 使用评估文件的目标无标签输入，只支持 transductive 协议")
+        if args.bn_adapt_passes <= 0:
+            raise SystemExit("--bn_adapt_passes 必须为正数")
+        if args.control == "target_only":
+            raise SystemExit("target_only 不适用 AdaBN（无源域/适配语义）")
     if args.control == "target_only" and args.label_ratio == 0:
         raise SystemExit("target_only 必须使用 label_ratio > 0")
     if args.control == "zero_label" and (args.label_ratio != 0 or args.lam != 0):

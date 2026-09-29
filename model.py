@@ -201,12 +201,37 @@ class MSRSABiLSTM(nn.Module):
 # ---------------------------------------------------------------------------
 # 迁移损失：多核 MMD
 # ---------------------------------------------------------------------------
-def gaussian_kernel(x, y, sigma=(1, 5, 10)):
-    """多核 RBF 核矩阵（3 个带宽 1/5/10 等权组合）。返回 (m,n) 核矩阵。"""
-    m, n = x.size(0), y.size(0)
+def gaussian_kernel(x, y, sigma=(1, 5, 10), scales=(0.25, 0.5, 1, 2, 4)):
+    """多核 RBF 核矩阵，返回 (m,n)。
+
+    sigma 语义（版本3 §5 冻结配方）：
+      - 序列（默认 `(1,5,10)`）：固定带宽等权多核——已冻结的主格配方，**勿改**。
+      - `"median"`：median heuristic 自适应带宽，以合并样本 pairwise 平方距离的中位数为
+        基准再乘 `scales`。**实测显著劣于固定带宽**：paired transductive
+        pool0.5/lr0.99/lam0.3/logspec，seed 0 段级 0.8975 vs 0.9763（−7.9pp）、记录硬
+        0.9286 vs 0.9643（−3.6pp），源域基线逐位一致（0.622858）故差异只来自带宽。
+        高维特征下 median 带宽过大、核矩阵趋近常数而失去区分度。仅作对照研究入口，勿当默认。
+
+    注：两种模式下 k(x,x)=exp(0)=1，故 `mmd_loss(unbiased)` 减对角线样本数的假设成立；
+    median 在 no_grad 下计算，只作尺度因子不回传梯度。
+    """
+    if isinstance(sigma, str):
+        if sigma != "median":
+            raise ValueError(f"未知 sigma 选项: {sigma}，只支持 'median' 或带宽序列")
+        with torch.no_grad():
+            z = torch.cat([x, y], dim=0)
+            zz = (z * z).sum(1)
+            d_all = (zz.unsqueeze(1) + zz.unsqueeze(0) - 2 * z @ z.T).clamp_min(0)
+            pos = d_all[d_all > 0]
+            med = pos.median() if pos.numel() > 0 else d_all.new_tensor(1.0)
+        bandwidths = [float(s) * med.clamp_min(1e-12) for s in scales]
+    else:
+        bandwidths = list(sigma)
     xx, yy, xy = (x * x).sum(1), (y * y).sum(1), x @ y.T
+    # 注意：不加 clamp_min(0)。浮点下 xx+yy-2xy 会产生微小负值，clamp 会改变核值并在
+    # 30 epoch 反传中放大（实测段级 0.9763→0.9732），破坏与冻结配方的逐位等价。
     dist = xx.unsqueeze(1) + yy.unsqueeze(0) - 2 * xy
-    return sum(torch.exp(-dist / (2 * s)) for s in sigma) / len(sigma)
+    return sum(torch.exp(-dist / (2 * s)) for s in bandwidths) / len(bandwidths)
 
 
 def mmd_loss(f_s, f_t, estimator="biased"):

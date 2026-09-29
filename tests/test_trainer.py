@@ -12,6 +12,7 @@ import torch.nn as nn
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import trainer as tr  # noqa: E402
 import preprocessing as pp  # noqa: E402
+from dataset import LABEL_NAMES  # noqa: E402
 from model import MSRSABiLSTM  # noqa: E402
 
 
@@ -64,6 +65,11 @@ class TestTrainPaths(unittest.TestCase):
         self.assertIn("record_accuracy_hard", res)
         self.assertIn("record_accuracy_soft", res)
         self.assertEqual(res["record_n_total"], 4)
+        # record_class_recall 必须存在且为四类列表（补齐后不再恒 None）
+        self.assertIn("record_class_recall", res)
+        self.assertEqual(len(res["record_class_recall"]), len(LABEL_NAMES))
+        for v in res["record_class_recall"]:
+            self.assertTrue(0.0 <= v <= 1.0)
 
     def test_adabn_nonneg_var(self):
         tr.seed_everything(0)

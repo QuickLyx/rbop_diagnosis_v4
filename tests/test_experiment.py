@@ -48,5 +48,38 @@ class TestDirNoOverwrite(unittest.TestCase):
                 ex.create_run_directory("R1", tmp)
 
 
+class _Args:
+    """构造最小 args 桩，只为测 _resolve_arm 与 _maybe_adabn。"""
+    lr_transfer = 1e-4
+    bn_adapt = False
+    bn_adapt_scope = "all"
+    bn_adapt_passes = 1
+
+
+class TestResolveArm(unittest.TestCase):
+    """P2.2 臂映射（版本3 §5 P2.2）。"""
+
+    def test_arm_mapping(self):
+        a = _Args()
+        self.assertEqual(ex._resolve_arm(None, a),
+                         {"freeze_backbone": False, "source_ce": True,
+                          "source_ce_weight": 1.0, "lr_transfer": 1e-4})
+        self.assertTrue(ex._resolve_arm("B", a)["freeze_backbone"])
+        self.assertFalse(ex._resolve_arm("C", a)["source_ce"])
+        self.assertEqual(ex._resolve_arm("D0.1", a)["source_ce_weight"], 0.1)
+        self.assertEqual(ex._resolve_arm("D0.3", a)["source_ce_weight"], 0.3)
+        self.assertEqual(ex._resolve_arm("E", a)["lr_transfer"], 1e-3)
+
+
+class TestMaybeAdabn(unittest.TestCase):
+    """AdaBN 主通路开关：未启用返回 (False,None,None)（版本3 §5 P0.1）。"""
+
+    def test_off_returns_none(self):
+        a = _Args()
+        a.bn_adapt = False
+        self.assertEqual(ex._maybe_adabn(a, None, {"X_unlab": None}),
+                         (False, None, None))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

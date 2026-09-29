@@ -76,8 +76,12 @@ def main():
         title = "频带重要性（谱前端 8 步）"
         if is_cepstrum:
             title += "；注意：cepstrum 低/高倒频拼接，序列轴中点不连续"
+            # 倒谱序列轴中点（4与5 之间）是低→高倒频的拼接缝，画分隔线并标注
+            ax.axvline(3.5, color="gray", linestyle="--", linewidth=1)
+            ax.text(1.5, ax.get_ylim()[1], "低倒频", ha="center", va="top", fontsize=9)
+            ax.text(5.5, ax.get_ylim()[1], "高倒频", ha="center", va="top", fontsize=9)
         ax.set_title(title)
-        ax.set_xlabel("序列步（频带）")
+        ax.set_xlabel("序列步（频带；cepstrum 为倒频区段）")
         ax.set_ylabel("平均注意力权重")
         ax.legend()
         fig.tight_layout()
@@ -85,6 +89,9 @@ def main():
         print(f"[产物] 注意力图已保存 {args.out}")
     except ImportError:
         print("[跳过绘图] 未安装 matplotlib；各类平均注意力权重：")
+        if is_cepstrum:
+            print("  [注意] cepstrum 低/高倒频拼接，序列轴前 4 步为低倒频、后 4 步为高倒频，"
+                  "中点不连续（版本3 §P3.1）")
         for c in range(len(ds.LABEL_NAMES)):
             mask = label == c
             if mask.sum() > 0:

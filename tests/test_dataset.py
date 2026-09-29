@@ -20,6 +20,25 @@ OLD_RESULTS = os.path.join(ROOT, "..", "rbop_diagnosis", "runs", "paired", "resu
 _HAS_DATA = os.path.isdir(os.path.join(DATA_ROOT, "12k_DE"))
 
 
+class TestParseLabel(unittest.TestCase):
+    """parse_label 基于 stem 前缀精确匹配（不受目录/盘符子串干扰）。"""
+
+    def test_basic_prefixes(self):
+        self.assertEqual(ds.parse_label("Normal_0.mat"), "N")
+        self.assertEqual(ds.parse_label("B007_0.mat"), "B")
+        self.assertEqual(ds.parse_label("IR014_1.mat"), "IR")
+        self.assertEqual(ds.parse_label("OR021@6_2.mat"), "OR")
+
+    def test_full_path_not_confused_by_dirs(self):
+        # 完整路径含目录/盘符时，只看 stem，不被目录里的 B/OR 等子串误导
+        self.assertEqual(ds.parse_label("E:/Base/OuterDir/Normal_2.mat"), "N")
+        self.assertEqual(ds.parse_label("/home/IRlab/B021_3.mat"), "B")
+
+    def test_unrecognized_raises(self):
+        with self.assertRaises(ValueError):
+            ds.parse_label("unknown_0.mat")
+
+
 @unittest.skipUnless(_HAS_DATA, "缺少 Data/ 目录")
 class TestEnumerateAndSegments(unittest.TestCase):
     """文件枚举与分段的基本不变量（版本3 §4.2 不变量 1–3）。"""
