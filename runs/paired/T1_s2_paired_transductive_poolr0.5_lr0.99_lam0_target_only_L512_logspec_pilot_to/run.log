@@ -1,0 +1,39 @@
+# 命令: python train.py --task T1 --seed 2 --protocol transductive --split_mode paired --repr logspec --label_ratio 0.99 --lam 0.0 --control target_only --seg_len 512 --source_epochs 30 --transfer_epochs 30 --runs_dir E:\文献\近两三年的故障诊断文献\rbop_diagnosis_v4\runs\paired --run_name T1_s2_paired_transductive_poolr0.5_lr0.99_lam0_target_only_L512_logspec_pilot_to --label_pool_ratio 0.5
+# 开始: 2026-09-28T22:27:11
+# task=T1 repr=logspec protocol=transductive split_mode=paired seed=2 control=target_only arm=None device=cuda
+[表征] logspec n_channels=1 input_dim=256 frontend=spectral_v1
+[划分] mode=paired label_ratio=0.99 pool=0.5
+[文件] labeled=28 unused=0 eval=28
+[样本] source=13191 labeled=6539 adapt=6652 eval=6652
+[目标从零训练] epochs=30 bs=64
+ep01 loss=0.2344 (2.5s)
+ep02 loss=0.0293 (2.4s)
+ep03 loss=0.0147 (2.2s)
+ep04 loss=0.0211 (1.9s)
+ep05 loss=0.0032 (1.9s)
+ep06 loss=0.0019 (1.9s)
+ep07 loss=0.0009 (2.0s)
+ep08 loss=0.0006 (2.4s)
+ep09 loss=0.0004 (2.0s)
+ep10 loss=0.0002 (2.1s)
+ep11 loss=0.0003 (2.0s)
+ep12 loss=0.0002 (2.3s)
+ep13 loss=0.0003 (2.0s)
+ep14 loss=0.0002 (2.3s)
+ep15 loss=0.0002 (2.1s)
+ep16 loss=0.0002 (2.3s)
+ep17 loss=0.0003 (2.1s)
+ep18 loss=0.0001 (1.9s)
+ep19 loss=0.0001 (1.9s)
+ep20 loss=0.0002 (2.1s)
+ep21 loss=0.0003 (1.9s)
+ep22 loss=0.0606 (2.0s)
+ep23 loss=0.0124 (1.9s)
+ep24 loss=0.0174 (1.9s)
+ep25 loss=0.0079 (1.8s)
+ep26 loss=0.0085 (1.8s)
+ep27 loss=0.0016 (1.8s)
+ep28 loss=0.0007 (1.8s)
+ep29 loss=0.0010 (1.8s)
+ep30 loss=0.0002 (1.8s)
+[产物] E:\文献\近两三年的故障诊断文献\rbop_diagnosis_v4\runs\paired\T1_s2_paired_transductive_poolr0.5_lr0.99_lam0_target_only_L512_logspec_pilot_to\run.log / E:\文献\近两三年的故障诊断文献\rbop_diagnosis_v4\runs\paired\T1_s2_paired_transductive_poolr0.5_lr0.99_lam0_target_only_L512_logspec_pilot_to
