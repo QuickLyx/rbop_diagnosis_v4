@@ -1,0 +1,73 @@
+seed0 [重估前] 段级=0.6229 记录硬=0.5714
+seed0 [重估后] scope=all stats=adapt passes=1  段级=0.7711 (Δ+0.1483) 记录硬=0.8571
+seed0 [重估后] scope=all stats=adapt passes=3  段级=0.7711 (Δ+0.1483) 记录硬=0.8571
+seed0 [重估后] scope=all stats=adapt passes=10 段级=0.7711 (Δ+0.1483) 记录硬=0.8571
+seed0 [重估前] 段级=0.6229 记录硬=0.5714
+seed0 [重估后] scope=all stats=all_target passes=1  段级=0.7786 (Δ+0.1558) 记录硬=0.8571
+seed0 [重估后] scope=all stats=all_target passes=3  段级=0.7786 (Δ+0.1558) 记录硬=0.8571
+seed0 [重估后] scope=all stats=all_target passes=10 段级=0.7786 (Δ+0.1558) 记录硬=0.8571
+seed0 [重估前] 段级=0.6229 记录硬=0.5714
+seed0 [重估后] scope=frontend stats=adapt passes=1  段级=0.7341 (Δ+0.1112) 记录硬=0.7143
+seed0 [重估后] scope=frontend stats=adapt passes=3  段级=0.7586 (Δ+0.1357) 记录硬=0.8214
+seed0 [重估后] scope=frontend stats=adapt passes=10 段级=0.7711 (Δ+0.1483) 记录硬=0.8571
+seed0 [重估前] 段级=0.6229 记录硬=0.5714
+seed0 [重估后] scope=frontend stats=all_target passes=1  段级=0.7538 (Δ+0.1310) 记录硬=0.8214
+seed0 [重估后] scope=frontend stats=all_target passes=3  段级=0.7751 (Δ+0.1522) 记录硬=0.8571
+seed0 [重估后] scope=frontend stats=all_target passes=10 段级=0.7794 (Δ+0.1565) 记录硬=0.8571
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=all stats=adapt passes=1  段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估后] scope=all stats=adapt passes=3  段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估后] scope=all stats=adapt passes=10 段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=all stats=all_target passes=1  段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估后] scope=all stats=all_target passes=3  段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估后] scope=all stats=all_target passes=10 段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=all stats=adapt passes=1  段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估后] scope=all stats=adapt passes=3  段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估后] scope=all stats=adapt passes=10 段级=0.6958 (Δ+0.0729) 记录硬=0.7857
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=all stats=all_target passes=1  段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估后] scope=all stats=all_target passes=3  段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估后] scope=all stats=all_target passes=10 段级=0.6878 (Δ+0.0649) 记录硬=0.7500
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=frontend stats=adapt passes=1  段级=0.6630 (Δ+0.0401) 记录硬=0.7143
+seed1 [重估后] scope=frontend stats=adapt passes=3  段级=0.6832 (Δ+0.0603) 记录硬=0.7143
+seed1 [重估后] scope=frontend stats=adapt passes=10 段级=0.6944 (Δ+0.0715) 记录硬=0.7500
+seed1 [重估前] 段级=0.6229 记录硬=0.6429
+seed1 [重估后] scope=frontend stats=all_target passes=1  段级=0.6676 (Δ+0.0447) 记录硬=0.7143
+seed1 [重估后] scope=frontend stats=all_target passes=3  段级=0.6869 (Δ+0.0640) 记录硬=0.7143
+seed1 [重估后] scope=frontend stats=all_target passes=10 段级=0.6887 (Δ+0.0658) 记录硬=0.7500
+seed2 [重估前] 段级=0.6046 记录硬=0.6071
+seed2 [重估后] scope=all stats=adapt passes=1  段级=0.6137 (Δ+0.0090) 记录硬=0.7143
+seed2 [重估后] scope=all stats=adapt passes=3  段级=0.6137 (Δ+0.0090) 记录硬=0.7143
+seed2 [重估后] scope=all stats=adapt passes=10 段级=0.6137 (Δ+0.0090) 记录硬=0.7143
+seed2 [重估前] 段级=0.6046 记录硬=0.6071
+seed2 [重估后] scope=all stats=all_target passes=1  段级=0.6236 (Δ+0.0189) 记录硬=0.7500
+seed2 [重估后] scope=all stats=all_target passes=3  段级=0.6236 (Δ+0.0189) 记录硬=0.7500
+seed2 [重估后] scope=all stats=all_target passes=10 段级=0.6236 (Δ+0.0189) 记录硬=0.7500
+seed2 [重估前] 段级=0.6046 记录硬=0.6071
+seed2 [重估后] scope=frontend stats=adapt passes=1  段级=0.6245 (Δ+0.0198) 记录硬=0.7500
+seed2 [重估后] scope=frontend stats=adapt passes=3  段级=0.6245 (Δ+0.0198) 记录硬=0.7143
+seed2 [重估后] scope=frontend stats=adapt passes=10 段级=0.6173 (Δ+0.0126) 记录硬=0.7143
+seed2 [重估前] 段级=0.6046 记录硬=0.6071
+seed2 [重估后] scope=frontend stats=all_target passes=1  段级=0.6312 (Δ+0.0266) 记录硬=0.7857
+seed2 [重估后] scope=frontend stats=all_target passes=3  段级=0.6303 (Δ+0.0257) 记录硬=0.7500
+seed2 [重估后] scope=frontend stats=all_target passes=10 段级=0.6266 (Δ+0.0219) 记录硬=0.7143
+seed3 [重估前] 段级=0.6447 记录硬=0.6429
+seed3 [重估后] scope=all stats=adapt passes=1  段级=0.6972 (Δ+0.0524) 记录硬=0.6429
+seed3 [重估后] scope=all stats=adapt passes=3  段级=0.6972 (Δ+0.0524) 记录硬=0.6429
+seed3 [重估后] scope=all stats=adapt passes=10 段级=0.6972 (Δ+0.0524) 记录硬=0.6429
+seed3 [重估前] 段级=0.6447 记录硬=0.6429
+seed3 [重估后] scope=all stats=all_target passes=1  段级=0.6952 (Δ+0.0505) 记录硬=0.6429
+seed3 [重估后] scope=all stats=all_target passes=3  段级=0.6952 (Δ+0.0505) 记录硬=0.6429
+seed3 [重估后] scope=all stats=all_target passes=10 段级=0.6952 (Δ+0.0505) 记录硬=0.6429
+seed3 [重估前] 段级=0.6447 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=adapt passes=1  段级=0.6314 (Δ-0.0134) 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=adapt passes=3  段级=0.6775 (Δ+0.0327) 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=adapt passes=10 段级=0.7021 (Δ+0.0574) 记录硬=0.6429
+seed3 [重估前] 段级=0.6447 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=all_target passes=1  段级=0.6453 (Δ+0.0006) 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=all_target passes=3  段级=0.6859 (Δ+0.0412) 记录硬=0.6429
+seed3 [重估后] scope=frontend stats=all_target passes=10 段级=0.6945 (Δ+0.0497) 记录硬=0.6429
+DONE_ADABN

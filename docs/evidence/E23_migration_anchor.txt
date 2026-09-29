@@ -1,0 +1,27 @@
+E23 迁移审计：v4 VMD 主格网络重跑锚定对拍
+================================================================
+依据：版本3 §4.2（网络重跑锚定，差 ≤2pp）、§5 P0.0（v4 自跑 VMD 主格基线 4 run）、
+      §11（E23）；执行清单 S8。
+环境：E:/tool/anaconda/envs/fault-detect/python.exe，PYTHONUTF8=1，GPU=GTX 1650 Ti。
+
+主格：paired / pool0.5 / label_ratio=0.99 / λ=0.3 / semi_supervised /
+      repr=vmd（legacy_vmd 前端 (4,4,4)）/ 30+30 epoch / bs=64 / lr_source=1e-3 /
+      lr_transfer=1e-4 / MMD biased / alignment=confidence / seeds 0-3。
+
+v4 自跑结果（run 名 T1_s{seed}_..._L512_vmd_baseline）：
+  seed0: 段级=0.7362 macro-F1=0.7282 记录硬=0.7857
+  seed1: 段级=0.8466 macro-F1=0.7860 记录硬=0.8929
+  seed2: 段级=0.7637 macro-F1=0.7287 记录硬=0.7857
+  seed3: 段级=0.9121 macro-F1=0.8819 记录硬=0.9286
+  4 seed 段级均值 = 0.8147 ± 0.0801
+
+旧库主格（../rbop_diagnosis/runs/paired/results.json，同配置）：
+  seed0=0.7362 seed1=0.8466 seed2=0.7637 seed3=0.9121，均值 0.8147 ± 0.0801（版本3 §8）
+
+逐 seed 段级差 = 0.00pp；均值锚定差 = 0.005pp（门槛 ≤2pp）→ 通过，无需书面解释差异。
+seed0 兼作迁移审计的网络锚定（版本3 §4.2 表末行）。
+
+意义：v4 训练管线（dataset→preprocessing→model(legacy_vmd)→trainer→experiment）
+逐环节复现旧库数值。M1/M2/M3 的 paired 配对差值一律相对本 4 run 基线计算
+（历史 0.8147 仅作锚定核对）。
+================================================================

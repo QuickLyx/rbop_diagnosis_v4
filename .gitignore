@@ -1,0 +1,26 @@
+# 数据与产物（本地大目录，不进仓库）
+Data/
+cache/
+runs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 实验与系统文件
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+*.mat
+.DS_Store
+Thumbs.db
+NUL
+
+# 环境
+.venv/
+venv/
+*.log
+.vscode/
+.idea/

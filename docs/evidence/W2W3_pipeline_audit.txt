@@ -1,0 +1,38 @@
+W2 + W3 里程碑验收结果（训练管线 + 读出与汇总）
+================================================================
+依据：版本3 §4.4/§4.5/§4.6/§4.7 / §P1 / §4.8 行 W2/W3；执行清单 S6–S10。
+
+[S6] model.py（双 frontend）
+- ConvFrontEnd 支持 spectral_v1（MaxPool(2)→MaxPool(4)→AdaptiveMaxPool1d(8)）与
+  legacy_vmd（(4,4,4)）；frontend 名入 checkpoint。
+- 验证：logspec256 下 AdaptiveMaxPool1d(8) 与 MaxPool1d(4) 逐点等价（allclose atol=1e-6）。
+- 全网络 7 个 BatchNorm1d（前端 3 + RSU 2×2）；conditional_mmd_loss 三模式沿用。
+- tests/test_model.py 通过。
+
+[S7] trainer.py + experiment.py + train.py + schema
+- checkpoint schema_version=1，含 repr_config/frontend/...；load 拒绝 schema_version≠1。
+- results.json 69 字段齐全（运行元数据 + 文件键 + 表征模型 + 适配读出 + 指标），无缺失/多余。
+- 记录级 record_accuracy_hard/soft 随 run 即时计算（evaluate_details 返回逐段概率 + 记录索引）。
+- AdaBN 分块精确统计 hook（adabn_recompute，scope=all/frontend），running_var 非负。
+- P2.2 五臂支持：freeze_backbone(B)/source_ce=False(C)/source_ce_weight(D)/lr_transfer(E)。
+- CLI 契约冻结并写入 README；run 命名含 _L{seg}_{repr}[_{tag}]；natural/paired 分写拒绝混表。
+- 端到端 smoke（logspec 1+1 epoch）：段级 0.9386 记录硬 0.9643，schema 完整。
+- tests/test_trainer.py、tests/test_experiment.py 通过。
+
+[S8] v4 VMD 主格基线（4 run，seed0 兼迁移锚定）→ 见 E23_migration_anchor.txt
+- 4 seed 段级均值 = 0.8147 ± 0.0801，与旧库逐 seed 差 0.00pp（锚定差 0.005pp ≤2pp）。
+
+[S9] 记录级读出（随 run 即时产出）
+- record_accuracy_hard/soft 等权、硬软分别落字段；record_n_wrong_hard/per_file_detail 记录聚集。
+
+[S10] summarize.py + visualize_attention.py
+- summarize.py：配对差值 + Holm step-down + cluster bootstrap + --self_check（通过）。
+- visualize_attention.py：注意力→频带重要性；cepstrum 标注低/高倒频拼接、序列轴中点不连续。
+
+[自检] 6 模块 _self_check 全通过：dataset/preprocessing/vmd/model/trainer/experiment。
+[测试] tests 全套 33 用例通过（含 128 run 划分等价）。
+
+W2 门槛（版本3 §4.8）：seed0 锚定与旧 run ≤2pp ✓（实测 0.00pp）；结果 schema 字段齐备 ✓。
+W3 门槛（版本3 §4.8）：全套 tests + 自检通过 ✓。
+结论：W2、W3 通过，进入 W4（进入实验：P2.1 pilot → M1）。
+================================================================

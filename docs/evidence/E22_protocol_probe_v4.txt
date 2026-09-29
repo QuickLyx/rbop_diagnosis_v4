@@ -1,0 +1,327 @@
+# 命令: python scripts/diag_protocol_probe.py --split_mode paired --label_pool_ratio 0.5 --label_ratios 0.3 0.6 0.99 --seeds 0 1 2 3 --reprs logspec cepstrum vmdstats --keys_out docs/evidence/E22_protocol_probe_keys.json
+============================================================================================================
+E22 协议匹配探针（paired 划分与 train.py 完全一致；CPU；逻辑回归；复用 preprocessing）
+  数据根目录=E:\文献\近两三年的故障诊断文献\rbop_diagnosis_v4\Data  L=512 不重叠  C=0.3  split_mode=paired  label_pool_ratio=0.5
+  记录级：硬=段 argmax 取多数；软=段概率均值后 argmax；两者均为记录等权
+============================================================================================================
+
+[表征] logspec  dim=256
+--- logspec seed=0 label_ratio=0.3：有标签 10 文件/2380 段，评估 28 文件/6536 段
+  target-only                段级acc=0.5724 f1=0.6692 硬=0.6071 软=0.5714  Nor=1.00 Bal=0.84 Inn=0.44 Out=0.47
+  target-only + balanced     段级acc=0.5480 f1=0.6542 硬=0.5357 软=0.5357  Nor=1.00 Bal=0.86 Inn=0.44 Out=0.41
+  source+target              段级acc=0.8187 f1=0.8061 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.45 Inn=0.85 Out=0.94
+  zero-label 不对齐             段级acc=0.5632 f1=0.4819 硬=0.6071 软=0.6071  Nor=1.00 Bal=0.12 Inn=0.97 Out=0.53
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7655 f1=0.7684 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.34 Inn=0.89 Out=0.87
+  zero-label 一阶对齐(eval统计)    段级acc=0.7664 f1=0.7653 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.31 Inn=0.89 Out=0.88
+--- logspec seed=1 label_ratio=0.3：有标签 10 文件/2378 段，评估 28 文件/6531 段
+  target-only                段级acc=0.6657 f1=0.6105 硬=0.6786 软=0.6786  Nor=0.66 Bal=0.50 Inn=0.19 Out=0.94
+  target-only + balanced     段级acc=0.6699 f1=0.6236 硬=0.6786 软=0.7143  Nor=0.67 Bal=0.53 Inn=0.22 Out=0.92
+  source+target              段级acc=0.8692 f1=0.8798 硬=1.0000 软=1.0000  Nor=0.96 Bal=0.76 Inn=0.81 Out=0.93
+  zero-label 不对齐             段级acc=0.5864 f1=0.5037 硬=0.6429 软=0.6429  Nor=1.00 Bal=0.15 Inn=0.94 Out=0.58
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7467 f1=0.7574 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.38 Inn=0.80 Out=0.85
+  zero-label 一阶对齐(eval统计)    段级acc=0.7481 f1=0.7520 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.34 Inn=0.82 Out=0.86
+--- logspec seed=2 label_ratio=0.3：有标签 10 文件/2263 段，评估 28 文件/6652 段
+  target-only                段级acc=0.7443 f1=0.7267 硬=0.7500 软=0.7500  Nor=1.00 Bal=0.94 Inn=0.17 Out=0.87
+  target-only + balanced     段级acc=0.7362 f1=0.7240 硬=0.7500 软=0.7500  Nor=1.00 Bal=0.96 Inn=0.18 Out=0.84
+  source+target              段级acc=0.7275 f1=0.7772 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.90 Inn=0.60 Out=0.67
+  zero-label 不对齐             段级acc=0.6158 f1=0.5411 硬=0.7500 软=0.7500  Nor=1.00 Bal=0.16 Inn=0.96 Out=0.61
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7483 f1=0.7486 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.30 Inn=0.86 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7470 f1=0.7421 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.27 Inn=0.84 Out=0.88
+--- logspec seed=3 label_ratio=0.3：有标签 10 文件/2374 段，评估 28 文件/6657 段
+  target-only                段级acc=0.7134 f1=0.7473 硬=0.8214 软=0.8214  Nor=0.99 Bal=0.44 Inn=0.66 Out=0.81
+  target-only + balanced     段级acc=0.7159 f1=0.7550 硬=0.8214 软=0.8214  Nor=1.00 Bal=0.46 Inn=0.70 Out=0.79
+  source+target              段级acc=0.7407 f1=0.7849 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.60 Inn=0.85 Out=0.72
+  zero-label 不对齐             段级acc=0.5920 f1=0.5187 硬=0.7143 软=0.7143  Nor=1.00 Bal=0.15 Inn=0.91 Out=0.59
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7551 f1=0.7539 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.34 Inn=0.81 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7622 f1=0.7540 硬=0.8571 软=0.8571  Nor=0.97 Bal=0.32 Inn=0.82 Out=0.90
+--- logspec seed=0 label_ratio=0.6：有标签 19 文件/4516 段，评估 28 文件/6536 段
+  target-only                段级acc=0.8088 f1=0.8372 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.75 Inn=0.64 Out=0.89
+  target-only + balanced     段级acc=0.8106 f1=0.8416 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.82 Inn=0.65 Out=0.85
+  source+target              段级acc=0.8640 f1=0.8670 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.60 Inn=0.93 Out=0.93
+  zero-label 不对齐             段级acc=0.5632 f1=0.4819 硬=0.6071 软=0.6071  Nor=1.00 Bal=0.12 Inn=0.97 Out=0.53
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7655 f1=0.7684 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.34 Inn=0.89 Out=0.87
+  zero-label 一阶对齐(eval统计)    段级acc=0.7664 f1=0.7653 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.31 Inn=0.89 Out=0.88
+--- logspec seed=1 label_ratio=0.6：有标签 19 文件/4517 段，评估 28 文件/6531 段
+  target-only                段级acc=0.8630 f1=0.8639 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.97 Inn=0.44 Out=0.98
+  target-only + balanced     段级acc=0.8737 f1=0.8776 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.97 Inn=0.49 Out=0.98
+  source+target              段级acc=0.9066 f1=0.9181 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.92 Inn=0.82 Out=0.93
+  zero-label 不对齐             段级acc=0.5864 f1=0.5037 硬=0.6429 软=0.6429  Nor=1.00 Bal=0.15 Inn=0.94 Out=0.58
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7467 f1=0.7574 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.38 Inn=0.80 Out=0.85
+  zero-label 一阶对齐(eval统计)    段级acc=0.7481 f1=0.7520 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.34 Inn=0.82 Out=0.86
+--- logspec seed=2 label_ratio=0.6：有标签 19 文件/4400 段，评估 28 文件/6652 段
+  target-only                段级acc=0.8411 f1=0.8550 硬=0.8571 软=0.8929  Nor=1.00 Bal=0.94 Inn=0.54 Out=0.90
+  target-only + balanced     段级acc=0.8364 f1=0.8526 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.96 Inn=0.55 Out=0.88
+  source+target              段级acc=0.8626 f1=0.8883 硬=0.9286 软=0.9286  Nor=1.00 Bal=0.88 Inn=0.90 Out=0.82
+  zero-label 不对齐             段级acc=0.6158 f1=0.5411 硬=0.7500 软=0.7500  Nor=1.00 Bal=0.16 Inn=0.96 Out=0.61
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7483 f1=0.7486 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.30 Inn=0.86 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7470 f1=0.7421 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.27 Inn=0.84 Out=0.88
+--- logspec seed=3 label_ratio=0.6：有标签 19 文件/4398 段，评估 28 文件/6657 段
+  target-only                段级acc=0.8541 f1=0.8745 硬=0.8214 软=0.8571  Nor=1.00 Bal=0.66 Inn=0.97 Out=0.87
+  target-only + balanced     段级acc=0.8535 f1=0.8760 硬=0.8214 软=0.8214  Nor=1.00 Bal=0.70 Inn=0.98 Out=0.85
+  source+target              段级acc=0.8001 f1=0.8258 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.58 Inn=0.93 Out=0.81
+  zero-label 不对齐             段级acc=0.5920 f1=0.5187 硬=0.7143 软=0.7143  Nor=1.00 Bal=0.15 Inn=0.91 Out=0.59
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7551 f1=0.7539 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.34 Inn=0.81 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7622 f1=0.7540 硬=0.8571 软=0.8571  Nor=0.97 Bal=0.32 Inn=0.82 Out=0.90
+--- logspec seed=0 label_ratio=0.99：有标签 28 文件/6655 段，评估 28 文件/6536 段
+  target-only                段级acc=0.8563 f1=0.8847 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.93 Inn=0.86 Out=0.81
+  target-only + balanced     段级acc=0.8511 f1=0.8816 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.95 Inn=0.88 Out=0.78
+  source+target              段级acc=0.9071 f1=0.9203 硬=1.0000 软=1.0000  Nor=0.99 Bal=0.84 Inn=0.96 Out=0.90
+  zero-label 不对齐             段级acc=0.5632 f1=0.4819 硬=0.6071 软=0.6071  Nor=1.00 Bal=0.12 Inn=0.97 Out=0.53
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7655 f1=0.7684 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.34 Inn=0.89 Out=0.87
+  zero-label 一阶对齐(eval统计)    段级acc=0.7664 f1=0.7653 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.31 Inn=0.89 Out=0.88
+--- logspec seed=1 label_ratio=0.99：有标签 28 文件/6660 段，评估 28 文件/6531 段
+  target-only                段级acc=0.9389 f1=0.9476 硬=0.9643 软=0.9643  Nor=1.00 Bal=0.96 Inn=0.81 Out=0.98
+  target-only + balanced     段级acc=0.9435 f1=0.9521 硬=0.9643 软=0.9643  Nor=1.00 Bal=0.97 Inn=0.83 Out=0.98
+  source+target              段级acc=0.9452 f1=0.9526 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.93 Inn=0.91 Out=0.96
+  zero-label 不对齐             段级acc=0.5864 f1=0.5037 硬=0.6429 软=0.6429  Nor=1.00 Bal=0.15 Inn=0.94 Out=0.58
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7467 f1=0.7574 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.38 Inn=0.80 Out=0.85
+  zero-label 一阶对齐(eval统计)    段级acc=0.7481 f1=0.7520 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.34 Inn=0.82 Out=0.86
+--- logspec seed=2 label_ratio=0.99：有标签 28 文件/6539 段，评估 28 文件/6652 段
+  target-only                段级acc=0.8640 f1=0.8755 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.91 Inn=0.58 Out=0.95
+  target-only + balanced     段级acc=0.8647 f1=0.8770 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.93 Inn=0.59 Out=0.93
+  source+target              段级acc=0.9003 f1=0.9131 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.83 Inn=0.91 Out=0.91
+  zero-label 不对齐             段级acc=0.6158 f1=0.5411 硬=0.7500 软=0.7500  Nor=1.00 Bal=0.16 Inn=0.96 Out=0.61
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7483 f1=0.7486 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.30 Inn=0.86 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7470 f1=0.7421 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.27 Inn=0.84 Out=0.88
+--- logspec seed=3 label_ratio=0.99：有标签 28 文件/6534 段，评估 28 文件/6657 段
+  target-only                段级acc=0.9384 f1=0.9482 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.92 Inn=0.90 Out=0.96
+  target-only + balanced     段级acc=0.9434 f1=0.9523 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.93 Inn=0.92 Out=0.95
+  source+target              段级acc=0.9282 f1=0.9368 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.85 Inn=0.90 Out=0.96
+  zero-label 不对齐             段级acc=0.5920 f1=0.5187 硬=0.7143 软=0.7143  Nor=1.00 Bal=0.15 Inn=0.91 Out=0.59
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7551 f1=0.7539 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.34 Inn=0.81 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7622 f1=0.7540 硬=0.8571 软=0.8571  Nor=0.97 Bal=0.32 Inn=0.82 Out=0.90
+
+--- logspec 汇总（4 seed 均值±样本SD）
+  source_target        lr=0.3   段级 0.7890±0.0669  f1 0.8120  记录硬 0.8661  记录软 0.8661  Nor=0.99±0.02 Bal=0.68±0.19 Inn=0.78±0.12 Out=0.82±0.14
+  source_target        lr=0.6   段级 0.8583±0.0439  f1 0.8748  记录硬 0.9018  记录软 0.9018  Nor=1.00±0.00 Bal=0.74±0.18 Inn=0.90±0.05 Out=0.87±0.07
+  source_target        lr=0.99  段级 0.9202±0.0204  f1 0.9307  记录硬 1.0000  记录软 1.0000  Nor=1.00±0.00 Bal=0.86±0.04 Inn=0.92±0.03 Out=0.93±0.03
+  target_only          lr=0.3   段级 0.6739±0.0750  f1 0.6884  记录硬 0.7143  记录软 0.7054  Nor=0.91±0.17 Bal=0.68±0.25 Inn=0.37±0.23 Out=0.77±0.21
+  target_only          lr=0.6   段级 0.8417±0.0238  f1 0.8576  记录硬 0.8571  记录软 0.8750  Nor=1.00±0.00 Bal=0.83±0.15 Inn=0.65±0.23 Out=0.91±0.05
+  target_only          lr=0.99  段级 0.8994±0.0454  f1 0.9140  记录硬 0.9375  记录软 0.9375  Nor=1.00±0.00 Bal=0.93±0.02 Inn=0.79±0.14 Out=0.92±0.08
+  target_only_balanced lr=0.3   段级 0.6675±0.0843  f1 0.6892  记录硬 0.6964  记录软 0.7054  Nor=0.92±0.16 Bal=0.70±0.24 Inn=0.39±0.24 Out=0.74±0.23
+  target_only_balanced lr=0.6   段级 0.8436±0.0267  f1 0.8619  记录硬 0.8661  记录软 0.8661  Nor=1.00±0.00 Bal=0.86±0.13 Inn=0.67±0.22 Out=0.89±0.06
+  target_only_balanced lr=0.99  段级 0.9007±0.0497  f1 0.9157  记录硬 0.9375  记录软 0.9375  Nor=1.00±0.00 Bal=0.95±0.02 Inn=0.80±0.15 Out=0.91±0.09
+  zero_label_align_all lr=0.3   段级 0.7539±0.0085  f1 0.7571  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.34±0.04 Inn=0.84±0.04 Out=0.87±0.01
+  zero_label_align_all lr=0.6   段级 0.7539±0.0085  f1 0.7571  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.34±0.04 Inn=0.84±0.04 Out=0.87±0.01
+  zero_label_align_all lr=0.99  段级 0.7539±0.0085  f1 0.7571  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.34±0.04 Inn=0.84±0.04 Out=0.87±0.01
+  zero_label_align_eval lr=0.3   段级 0.7559±0.0098  f1 0.7533  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.31±0.03 Inn=0.84±0.03 Out=0.88±0.01
+  zero_label_align_eval lr=0.6   段级 0.7559±0.0098  f1 0.7533  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.31±0.03 Inn=0.84±0.03 Out=0.88±0.01
+  zero_label_align_eval lr=0.99  段级 0.7559±0.0098  f1 0.7533  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.31±0.03 Inn=0.84±0.03 Out=0.88±0.01
+  zero_label_raw       lr=0.3   段级 0.5893±0.0216  f1 0.5114  记录硬 0.6786  记录软 0.6786  Nor=1.00±0.00 Bal=0.15±0.02 Inn=0.95±0.03 Out=0.58±0.03
+  zero_label_raw       lr=0.6   段级 0.5893±0.0216  f1 0.5114  记录硬 0.6786  记录软 0.6786  Nor=1.00±0.00 Bal=0.15±0.02 Inn=0.95±0.03 Out=0.58±0.03
+  zero_label_raw       lr=0.99  段级 0.5893±0.0216  f1 0.5114  记录硬 0.6786  记录软 0.6786  Nor=1.00±0.00 Bal=0.15±0.02 Inn=0.95±0.03 Out=0.58±0.03
+
+[表征] cepstrum  dim=236
+--- cepstrum seed=0 label_ratio=0.3：有标签 10 文件/2380 段，评估 28 文件/6536 段
+  target-only                段级acc=0.7075 f1=0.7246 硬=0.7857 软=0.7500  Nor=0.97 Bal=0.75 Inn=0.32 Out=0.83
+  target-only + balanced     段级acc=0.7052 f1=0.7344 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.82 Inn=0.36 Out=0.77
+  source+target              段级acc=0.8069 f1=0.7933 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.43 Inn=0.87 Out=0.92
+  zero-label 不对齐             段级acc=0.6986 f1=0.6611 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.27 Inn=0.99 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7384 f1=0.7308 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.34 Inn=0.84 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7387 f1=0.7242 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.32 Inn=0.81 Out=0.88
+--- cepstrum seed=1 label_ratio=0.3：有标签 10 文件/2378 段，评估 28 文件/6531 段
+  target-only                段级acc=0.6642 f1=0.6095 硬=0.6429 软=0.6429  Nor=0.65 Bal=0.53 Inn=0.19 Out=0.93
+  target-only + balanced     段级acc=0.6728 f1=0.6273 硬=0.6429 软=0.6429  Nor=0.66 Bal=0.55 Inn=0.23 Out=0.92
+  source+target              段级acc=0.8524 f1=0.8489 硬=1.0000 软=0.9643  Nor=0.83 Bal=0.72 Inn=0.86 Out=0.91
+  zero-label 不对齐             段级acc=0.6985 f1=0.6707 硬=0.8214 软=0.8214  Nor=0.98 Bal=0.30 Inn=0.97 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7233 f1=0.7211 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.36 Inn=0.76 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7327 f1=0.7213 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.34 Inn=0.78 Out=0.88
+--- cepstrum seed=2 label_ratio=0.3：有标签 10 文件/2263 段，评估 28 文件/6652 段
+  target-only                段级acc=0.7568 f1=0.7377 硬=0.7857 软=0.7857  Nor=0.98 Bal=0.92 Inn=0.19 Out=0.90
+  target-only + balanced     段级acc=0.7538 f1=0.7394 硬=0.7857 软=0.7857  Nor=0.99 Bal=0.94 Inn=0.20 Out=0.88
+  source+target              段级acc=0.7169 f1=0.7741 硬=0.8571 软=0.7857  Nor=0.99 Bal=0.88 Inn=0.66 Out=0.63
+  zero-label 不对齐             段级acc=0.7105 f1=0.6823 硬=0.8214 软=0.8214  Nor=0.99 Bal=0.28 Inn=0.98 Out=0.74
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7255 f1=0.7246 硬=0.8571 软=0.8571  Nor=0.86 Bal=0.33 Inn=0.77 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7300 f1=0.7168 硬=0.8571 软=0.8571  Nor=0.82 Bal=0.30 Inn=0.78 Out=0.88
+--- cepstrum seed=3 label_ratio=0.3：有标签 10 文件/2374 段，评估 28 文件/6657 段
+  target-only                段级acc=0.6647 f1=0.6747 硬=0.7857 软=0.7500  Nor=0.68 Bal=0.40 Inn=0.66 Out=0.78
+  target-only + balanced     段级acc=0.6694 f1=0.6902 硬=0.7143 软=0.7143  Nor=0.73 Bal=0.41 Inn=0.70 Out=0.76
+  source+target              段级acc=0.7512 f1=0.7844 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.60 Inn=0.88 Out=0.73
+  zero-label 不对齐             段级acc=0.7095 f1=0.6793 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.28 Inn=0.96 Out=0.75
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7209 f1=0.6950 硬=0.8214 软=0.8214  Nor=0.67 Bal=0.33 Inn=0.76 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7227 f1=0.6841 硬=0.8214 软=0.8214  Nor=0.62 Bal=0.31 Inn=0.76 Out=0.90
+--- cepstrum seed=0 label_ratio=0.6：有标签 19 文件/4516 段，评估 28 文件/6536 段
+  target-only                段级acc=0.8378 f1=0.8558 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.80 Inn=0.63 Out=0.93
+  target-only + balanced     段级acc=0.8383 f1=0.8561 硬=0.9286 软=0.9286  Nor=1.00 Bal=0.81 Inn=0.65 Out=0.91
+  source+target              段级acc=0.8608 f1=0.8512 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.58 Inn=0.93 Out=0.94
+  zero-label 不对齐             段级acc=0.6986 f1=0.6611 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.27 Inn=0.99 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7384 f1=0.7308 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.34 Inn=0.84 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7387 f1=0.7242 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.32 Inn=0.81 Out=0.88
+--- cepstrum seed=1 label_ratio=0.6：有标签 19 文件/4517 段，评估 28 文件/6531 段
+  target-only                段级acc=0.8464 f1=0.8421 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.96 Inn=0.38 Out=0.98
+  target-only + balanced     段级acc=0.8597 f1=0.8608 硬=0.8929 软=0.8929  Nor=0.99 Bal=0.97 Inn=0.44 Out=0.97
+  source+target              段级acc=0.9094 f1=0.9196 硬=1.0000 软=1.0000  Nor=0.98 Bal=0.93 Inn=0.87 Out=0.91
+  zero-label 不对齐             段级acc=0.6985 f1=0.6707 硬=0.8214 软=0.8214  Nor=0.98 Bal=0.30 Inn=0.97 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7233 f1=0.7211 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.36 Inn=0.76 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7327 f1=0.7213 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.34 Inn=0.78 Out=0.88
+--- cepstrum seed=2 label_ratio=0.6：有标签 19 文件/4400 段，评估 28 文件/6652 段
+  target-only                段级acc=0.8388 f1=0.8567 硬=0.8571 软=0.8571  Nor=0.99 Bal=0.94 Inn=0.59 Out=0.88
+  target-only + balanced     段级acc=0.8339 f1=0.8543 硬=0.8571 软=0.8571  Nor=1.00 Bal=0.95 Inn=0.61 Out=0.86
+  source+target              段级acc=0.8623 f1=0.8874 硬=0.9286 软=0.9286  Nor=1.00 Bal=0.89 Inn=0.89 Out=0.82
+  zero-label 不对齐             段级acc=0.7105 f1=0.6823 硬=0.8214 软=0.8214  Nor=0.99 Bal=0.28 Inn=0.98 Out=0.74
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7255 f1=0.7246 硬=0.8571 软=0.8571  Nor=0.86 Bal=0.33 Inn=0.77 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7300 f1=0.7168 硬=0.8571 软=0.8571  Nor=0.82 Bal=0.30 Inn=0.78 Out=0.88
+--- cepstrum seed=3 label_ratio=0.6：有标签 19 文件/4398 段，评估 28 文件/6657 段
+  target-only                段级acc=0.8429 f1=0.8660 硬=0.8214 软=0.8214  Nor=0.98 Bal=0.71 Inn=0.95 Out=0.84
+  target-only + balanced     段级acc=0.8454 f1=0.8692 硬=0.8214 软=0.8214  Nor=0.99 Bal=0.74 Inn=0.96 Out=0.82
+  source+target              段级acc=0.7950 f1=0.8170 硬=0.7857 软=0.7857  Nor=1.00 Bal=0.57 Inn=0.96 Out=0.79
+  zero-label 不对齐             段级acc=0.7095 f1=0.6793 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.28 Inn=0.96 Out=0.75
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7209 f1=0.6950 硬=0.8214 软=0.8214  Nor=0.67 Bal=0.33 Inn=0.76 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7227 f1=0.6841 硬=0.8214 软=0.8214  Nor=0.62 Bal=0.31 Inn=0.76 Out=0.90
+--- cepstrum seed=0 label_ratio=0.99：有标签 28 文件/6655 段，评估 28 文件/6536 段
+  target-only                段级acc=0.8595 f1=0.8849 硬=0.9286 软=0.8929  Nor=0.99 Bal=0.92 Inn=0.81 Out=0.84
+  target-only + balanced     段级acc=0.8579 f1=0.8852 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.94 Inn=0.84 Out=0.82
+  source+target              段级acc=0.9082 f1=0.9191 硬=1.0000 软=1.0000  Nor=0.99 Bal=0.86 Inn=0.95 Out=0.90
+  zero-label 不对齐             段级acc=0.6986 f1=0.6611 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.27 Inn=0.99 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7384 f1=0.7308 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.34 Inn=0.84 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7387 f1=0.7242 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.32 Inn=0.81 Out=0.88
+--- cepstrum seed=1 label_ratio=0.99：有标签 28 文件/6660 段，评估 28 文件/6531 段
+  target-only                段级acc=0.9309 f1=0.9380 硬=1.0000 软=1.0000  Nor=0.98 Bal=0.95 Inn=0.79 Out=0.98
+  target-only + balanced     段级acc=0.9349 f1=0.9430 硬=1.0000 软=1.0000  Nor=0.99 Bal=0.96 Inn=0.81 Out=0.97
+  source+target              段级acc=0.9478 f1=0.9526 硬=1.0000 软=1.0000  Nor=0.98 Bal=0.93 Inn=0.92 Out=0.96
+  zero-label 不对齐             段级acc=0.6985 f1=0.6707 硬=0.8214 软=0.8214  Nor=0.98 Bal=0.30 Inn=0.97 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7233 f1=0.7211 硬=0.8571 软=0.8571  Nor=0.81 Bal=0.36 Inn=0.76 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7327 f1=0.7213 硬=0.8571 软=0.8571  Nor=0.79 Bal=0.34 Inn=0.78 Out=0.88
+--- cepstrum seed=2 label_ratio=0.99：有标签 28 文件/6539 段，评估 28 文件/6652 段
+  target-only                段级acc=0.8790 f1=0.8903 硬=0.8929 软=0.8929  Nor=0.99 Bal=0.92 Inn=0.63 Out=0.95
+  target-only + balanced     段级acc=0.8800 f1=0.8926 硬=0.8929 软=0.8929  Nor=1.00 Bal=0.93 Inn=0.65 Out=0.94
+  source+target              段级acc=0.8985 f1=0.9126 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.85 Inn=0.88 Out=0.91
+  zero-label 不对齐             段级acc=0.7105 f1=0.6823 硬=0.8214 软=0.8214  Nor=0.99 Bal=0.28 Inn=0.98 Out=0.74
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7255 f1=0.7246 硬=0.8571 软=0.8571  Nor=0.86 Bal=0.33 Inn=0.77 Out=0.86
+  zero-label 一阶对齐(eval统计)    段级acc=0.7300 f1=0.7168 硬=0.8571 软=0.8571  Nor=0.82 Bal=0.30 Inn=0.78 Out=0.88
+--- cepstrum seed=3 label_ratio=0.99：有标签 28 文件/6534 段，评估 28 文件/6657 段
+  target-only                段级acc=0.9292 f1=0.9400 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.94 Inn=0.88 Out=0.94
+  target-only + balanced     段级acc=0.9292 f1=0.9406 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.95 Inn=0.89 Out=0.93
+  source+target              段级acc=0.9474 f1=0.9537 硬=1.0000 软=1.0000  Nor=1.00 Bal=0.89 Inn=0.94 Out=0.97
+  zero-label 不对齐             段级acc=0.7095 f1=0.6793 硬=0.8571 软=0.8571  Nor=0.98 Bal=0.28 Inn=0.96 Out=0.75
+  zero-label 一阶对齐(全FE统计)     段级acc=0.7209 f1=0.6950 硬=0.8214 软=0.8214  Nor=0.67 Bal=0.33 Inn=0.76 Out=0.88
+  zero-label 一阶对齐(eval统计)    段级acc=0.7227 f1=0.6841 硬=0.8214 软=0.8214  Nor=0.62 Bal=0.31 Inn=0.76 Out=0.90
+
+--- cepstrum 汇总（4 seed 均值±样本SD）
+  source_target        lr=0.3   段级 0.7819±0.0599  f1 0.8002  记录硬 0.8750  记录软 0.8482  Nor=0.95±0.08 Bal=0.66±0.19 Inn=0.82±0.11 Out=0.80±0.14
+  source_target        lr=0.6   段级 0.8568±0.0470  f1 0.8688  记录硬 0.9018  记录软 0.9018  Nor=0.99±0.01 Bal=0.74±0.20 Inn=0.91±0.04 Out=0.86±0.07
+  source_target        lr=0.99  段级 0.9255±0.0258  f1 0.9345  记录硬 1.0000  记录软 1.0000  Nor=0.99±0.01 Bal=0.88±0.03 Inn=0.92±0.03 Out=0.94±0.03
+  target_only          lr=0.3   段级 0.6983±0.0439  f1 0.6866  记录硬 0.7500  记录软 0.7321  Nor=0.82±0.18 Bal=0.65±0.23 Inn=0.34±0.22 Out=0.86±0.07
+  target_only          lr=0.6   段级 0.8415±0.0039  f1 0.8551  记录硬 0.8571  记录软 0.8571  Nor=0.99±0.01 Bal=0.85±0.12 Inn=0.64±0.24 Out=0.91±0.06
+  target_only          lr=0.99  段级 0.8997±0.0360  f1 0.9133  记录硬 0.9554  记录软 0.9464  Nor=0.99±0.01 Bal=0.93±0.02 Inn=0.78±0.10 Out=0.93±0.06
+  target_only_balanced lr=0.3   段级 0.7003±0.0391  f1 0.6978  记录硬 0.7321  记录软 0.7321  Nor=0.85±0.18 Bal=0.68±0.24 Inn=0.37±0.23 Out=0.83±0.08
+  target_only_balanced lr=0.6   段级 0.8443±0.0113  f1 0.8601  记录硬 0.8750  记录软 0.8750  Nor=0.99±0.00 Bal=0.87±0.11 Inn=0.67±0.22 Out=0.89±0.07
+  target_only_balanced lr=0.99  段级 0.9005±0.0376  f1 0.9154  记录硬 0.9464  记录软 0.9464  Nor=1.00±0.01 Bal=0.94±0.01 Inn=0.80±0.10 Out=0.91±0.07
+  zero_label_align_all lr=0.3   段级 0.7270±0.0078  f1 0.7179  记录硬 0.8482  记录软 0.8482  Nor=0.79±0.08 Bal=0.34±0.02 Inn=0.78±0.04 Out=0.86±0.01
+  zero_label_align_all lr=0.6   段级 0.7270±0.0078  f1 0.7179  记录硬 0.8482  记录软 0.8482  Nor=0.79±0.08 Bal=0.34±0.02 Inn=0.78±0.04 Out=0.86±0.01
+  zero_label_align_all lr=0.99  段级 0.7270±0.0078  f1 0.7179  记录硬 0.8482  记录软 0.8482  Nor=0.79±0.08 Bal=0.34±0.02 Inn=0.78±0.04 Out=0.86±0.01
+  zero_label_align_eval lr=0.3   段级 0.7310±0.0066  f1 0.7116  记录硬 0.8482  记录软 0.8482  Nor=0.75±0.09 Bal=0.32±0.02 Inn=0.78±0.02 Out=0.88±0.01
+  zero_label_align_eval lr=0.6   段级 0.7310±0.0066  f1 0.7116  记录硬 0.8482  记录软 0.8482  Nor=0.75±0.09 Bal=0.32±0.02 Inn=0.78±0.02 Out=0.88±0.01
+  zero_label_align_eval lr=0.99  段级 0.7310±0.0066  f1 0.7116  记录硬 0.8482  记录软 0.8482  Nor=0.75±0.09 Bal=0.32±0.02 Inn=0.78±0.02 Out=0.88±0.01
+  zero_label_raw       lr=0.3   段级 0.7043±0.0066  f1 0.6734  记录硬 0.8393  记录软 0.8393  Nor=0.98±0.01 Bal=0.28±0.01 Inn=0.98±0.01 Out=0.73±0.01
+  zero_label_raw       lr=0.6   段级 0.7043±0.0066  f1 0.6734  记录硬 0.8393  记录软 0.8393  Nor=0.98±0.01 Bal=0.28±0.01 Inn=0.98±0.01 Out=0.73±0.01
+  zero_label_raw       lr=0.99  段级 0.7043±0.0066  f1 0.6734  记录硬 0.8393  记录软 0.8393  Nor=0.98±0.01 Bal=0.28±0.01 Inn=0.98±0.01 Out=0.73±0.01
+
+[表征] vmdstats  dim=32
+--- vmdstats seed=0 label_ratio=0.3：有标签 10 文件/2380 段，评估 28 文件/6536 段
+  target-only                段级acc=0.4810 f1=0.4893 硬=0.3929 软=0.3929  Nor=0.53 Bal=0.56 Inn=0.34 Out=0.50
+  target-only + balanced     段级acc=0.4774 f1=0.4897 硬=0.3929 软=0.4286  Nor=0.56 Bal=0.61 Inn=0.34 Out=0.47
+  source+target              段级acc=0.6662 f1=0.6137 硬=0.7143 软=0.7143  Nor=0.95 Bal=0.36 Inn=0.34 Out=0.91
+  zero-label 不对齐             段级acc=0.4806 f1=0.3520 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.34 Out=0.69
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4515 f1=0.2678 硬=0.5000 软=0.4643  Nor=0.04 Bal=0.03 Inn=0.31 Out=0.74
+  zero-label 一阶对齐(eval统计)    段级acc=0.4458 f1=0.2719 硬=0.4286 软=0.4286  Nor=0.00 Bal=0.16 Inn=0.27 Out=0.69
+--- vmdstats seed=1 label_ratio=0.3：有标签 10 文件/2378 段，评估 28 文件/6531 段
+  target-only                段级acc=0.4900 f1=0.3925 硬=0.5000 软=0.5000  Nor=0.35 Bal=0.07 Inn=0.28 Out=0.77
+  target-only + balanced     段级acc=0.4817 f1=0.3950 硬=0.5000 软=0.5000  Nor=0.35 Bal=0.10 Inn=0.30 Out=0.73
+  source+target              段级acc=0.5573 f1=0.5728 硬=0.6786 软=0.6786  Nor=0.80 Bal=0.52 Inn=0.27 Out=0.67
+  zero-label 不对齐             段级acc=0.4583 f1=0.3054 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.18 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4290 f1=0.2793 硬=0.4286 软=0.3929  Nor=0.04 Bal=0.13 Inn=0.28 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.4166 f1=0.2700 硬=0.3571 软=0.3571  Nor=0.01 Bal=0.18 Inn=0.29 Out=0.61
+--- vmdstats seed=2 label_ratio=0.3：有标签 10 文件/2263 段，评估 28 文件/6652 段
+  target-only                段级acc=0.7226 f1=0.6900 硬=0.7500 软=0.7500  Nor=0.89 Bal=0.82 Inn=0.17 Out=0.89
+  target-only + balanced     段级acc=0.7145 f1=0.6892 硬=0.7143 软=0.7143  Nor=0.95 Bal=0.86 Inn=0.17 Out=0.85
+  source+target              段级acc=0.6772 f1=0.6378 硬=0.7500 软=0.7500  Nor=0.94 Bal=0.56 Inn=0.17 Out=0.91
+  zero-label 不对齐             段级acc=0.5083 f1=0.3391 硬=0.5714 软=0.5714  Nor=1.00 Bal=0.00 Inn=0.17 Out=0.80
+  zero-label 一阶对齐(全FE统计)     段级acc=0.3876 f1=0.2567 硬=0.4286 软=0.4286  Nor=0.12 Bal=0.04 Inn=0.17 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.3655 f1=0.2345 硬=0.3929 软=0.3929  Nor=0.07 Bal=0.04 Inn=0.22 Out=0.61
+--- vmdstats seed=3 label_ratio=0.3：有标签 10 文件/2374 段，评估 28 文件/6657 段
+  target-only                段级acc=0.6354 f1=0.5961 硬=0.7143 软=0.7143  Nor=0.81 Bal=0.61 Inn=0.25 Out=0.78
+  target-only + balanced     段级acc=0.6242 f1=0.5884 硬=0.7143 软=0.7143  Nor=0.81 Bal=0.66 Inn=0.28 Out=0.73
+  source+target              段级acc=0.6100 f1=0.5697 硬=0.6786 软=0.6786  Nor=0.87 Bal=0.34 Inn=0.18 Out=0.87
+  zero-label 不对齐             段级acc=0.4690 f1=0.3152 硬=0.5714 软=0.5714  Nor=0.94 Bal=0.00 Inn=0.18 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4012 f1=0.2150 硬=0.4286 软=0.4286  Nor=0.03 Bal=0.02 Inn=0.17 Out=0.72
+  zero-label 一阶对齐(eval统计)    段级acc=0.3578 f1=0.1837 硬=0.3214 软=0.3214  Nor=0.00 Bal=0.03 Inn=0.13 Out=0.64
+--- vmdstats seed=0 label_ratio=0.6：有标签 19 文件/4516 段，评估 28 文件/6536 段
+  target-only                段级acc=0.7765 f1=0.7578 硬=0.8214 软=0.8214  Nor=0.83 Bal=0.80 Inn=0.67 Out=0.81
+  target-only + balanced     段级acc=0.7537 f1=0.7467 硬=0.8214 软=0.8214  Nor=0.89 Bal=0.83 Inn=0.67 Out=0.74
+  source+target              段级acc=0.7534 f1=0.7662 硬=0.8929 软=0.8929  Nor=0.95 Bal=0.69 Inn=0.62 Out=0.82
+  zero-label 不对齐             段级acc=0.4806 f1=0.3520 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.34 Out=0.69
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4515 f1=0.2678 硬=0.5000 软=0.4643  Nor=0.04 Bal=0.03 Inn=0.31 Out=0.74
+  zero-label 一阶对齐(eval统计)    段级acc=0.4458 f1=0.2719 硬=0.4286 软=0.4286  Nor=0.00 Bal=0.16 Inn=0.27 Out=0.69
+--- vmdstats seed=1 label_ratio=0.6：有标签 19 文件/4517 段，评估 28 文件/6531 段
+  target-only                段级acc=0.6944 f1=0.6270 硬=0.7500 软=0.7500  Nor=0.94 Bal=0.64 Inn=0.20 Out=0.90
+  target-only + balanced     段级acc=0.6831 f1=0.6154 硬=0.7500 软=0.7500  Nor=0.95 Bal=0.67 Inn=0.21 Out=0.86
+  source+target              段级acc=0.6627 f1=0.6733 硬=0.8214 软=0.8214  Nor=0.95 Bal=0.72 Inn=0.28 Out=0.77
+  zero-label 不对齐             段级acc=0.4583 f1=0.3054 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.18 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4290 f1=0.2793 硬=0.4286 软=0.3929  Nor=0.04 Bal=0.13 Inn=0.28 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.4166 f1=0.2700 硬=0.3571 软=0.3571  Nor=0.01 Bal=0.18 Inn=0.29 Out=0.61
+--- vmdstats seed=2 label_ratio=0.6：有标签 19 文件/4400 段，评估 28 文件/6652 段
+  target-only                段级acc=0.6992 f1=0.6879 硬=0.7857 软=0.7857  Nor=0.72 Bal=0.85 Inn=0.35 Out=0.78
+  target-only + balanced     段级acc=0.7048 f1=0.7094 硬=0.7857 软=0.7857  Nor=0.83 Bal=0.90 Inn=0.37 Out=0.75
+  source+target              段级acc=0.7348 f1=0.7266 硬=0.8571 软=0.8571  Nor=0.89 Bal=0.67 Inn=0.42 Out=0.87
+  zero-label 不对齐             段级acc=0.5083 f1=0.3391 硬=0.5714 软=0.5714  Nor=1.00 Bal=0.00 Inn=0.17 Out=0.80
+  zero-label 一阶对齐(全FE统计)     段级acc=0.3876 f1=0.2567 硬=0.4286 软=0.4286  Nor=0.12 Bal=0.04 Inn=0.17 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.3655 f1=0.2345 硬=0.3929 软=0.3929  Nor=0.07 Bal=0.04 Inn=0.22 Out=0.61
+--- vmdstats seed=3 label_ratio=0.6：有标签 19 文件/4398 段，评估 28 文件/6657 段
+  target-only                段级acc=0.7179 f1=0.6800 硬=0.7857 软=0.7500  Nor=0.51 Bal=0.91 Inn=0.51 Out=0.75
+  target-only + balanced     段级acc=0.7122 f1=0.6783 硬=0.7500 软=0.7500  Nor=0.51 Bal=0.93 Inn=0.59 Out=0.70
+  source+target              段级acc=0.6856 f1=0.6505 硬=0.7143 软=0.7143  Nor=0.81 Bal=0.54 Inn=0.32 Out=0.89
+  zero-label 不对齐             段级acc=0.4690 f1=0.3152 硬=0.5714 软=0.5714  Nor=0.94 Bal=0.00 Inn=0.18 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4012 f1=0.2150 硬=0.4286 软=0.4286  Nor=0.03 Bal=0.02 Inn=0.17 Out=0.72
+  zero-label 一阶对齐(eval统计)    段级acc=0.3578 f1=0.1837 硬=0.3214 软=0.3214  Nor=0.00 Bal=0.03 Inn=0.13 Out=0.64
+--- vmdstats seed=0 label_ratio=0.99：有标签 28 文件/6655 段，评估 28 文件/6536 段
+  target-only                段级acc=0.6922 f1=0.7252 硬=0.7857 软=0.7857  Nor=0.94 Bal=0.82 Inn=0.86 Out=0.54
+  target-only + balanced     段级acc=0.6726 f1=0.7129 硬=0.7500 软=0.7857  Nor=0.95 Bal=0.85 Inn=0.90 Out=0.47
+  source+target              段级acc=0.6527 f1=0.7164 硬=0.7500 软=0.7857  Nor=0.94 Bal=0.73 Inn=0.74 Out=0.55
+  zero-label 不对齐             段级acc=0.4806 f1=0.3520 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.34 Out=0.69
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4515 f1=0.2678 硬=0.5000 软=0.4643  Nor=0.04 Bal=0.03 Inn=0.31 Out=0.74
+  zero-label 一阶对齐(eval统计)    段级acc=0.4458 f1=0.2719 硬=0.4286 软=0.4286  Nor=0.00 Bal=0.16 Inn=0.27 Out=0.69
+--- vmdstats seed=1 label_ratio=0.99：有标签 28 文件/6660 段，评估 28 文件/6531 段
+  target-only                段级acc=0.7938 f1=0.7485 硬=0.8571 软=0.8571  Nor=0.86 Bal=0.75 Inn=0.48 Out=0.94
+  target-only + balanced     段级acc=0.7980 f1=0.7580 硬=0.9643 软=0.9643  Nor=0.92 Bal=0.77 Inn=0.58 Out=0.89
+  source+target              段级acc=0.7657 f1=0.7626 硬=0.8571 软=0.8571  Nor=0.93 Bal=0.86 Inn=0.42 Out=0.86
+  zero-label 不对齐             段级acc=0.4583 f1=0.3054 硬=0.5714 软=0.5714  Nor=0.99 Bal=0.00 Inn=0.18 Out=0.72
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4290 f1=0.2793 硬=0.4286 软=0.3929  Nor=0.04 Bal=0.13 Inn=0.28 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.4166 f1=0.2700 硬=0.3571 软=0.3571  Nor=0.01 Bal=0.18 Inn=0.29 Out=0.61
+--- vmdstats seed=2 label_ratio=0.99：有标签 28 文件/6539 段，评估 28 文件/6652 段
+  target-only                段级acc=0.8273 f1=0.8017 硬=0.8929 软=0.8929  Nor=0.80 Bal=0.90 Inn=0.47 Out=0.95
+  target-only + balanced     段级acc=0.8249 f1=0.8106 硬=0.8929 软=0.8929  Nor=0.91 Bal=0.92 Inn=0.48 Out=0.92
+  source+target              段级acc=0.7631 f1=0.7479 硬=0.8571 软=0.8571  Nor=0.88 Bal=0.68 Inn=0.44 Out=0.92
+  zero-label 不对齐             段级acc=0.5083 f1=0.3391 硬=0.5714 软=0.5714  Nor=1.00 Bal=0.00 Inn=0.17 Out=0.80
+  zero-label 一阶对齐(全FE统计)     段级acc=0.3876 f1=0.2567 硬=0.4286 软=0.4286  Nor=0.12 Bal=0.04 Inn=0.17 Out=0.66
+  zero-label 一阶对齐(eval统计)    段级acc=0.3655 f1=0.2345 硬=0.3929 软=0.3929  Nor=0.07 Bal=0.04 Inn=0.22 Out=0.61
+--- vmdstats seed=3 label_ratio=0.99：有标签 28 文件/6534 段，评估 28 文件/6657 段
+  target-only                段级acc=0.7745 f1=0.7079 硬=0.7857 软=0.7857  Nor=0.50 Bal=0.84 Inn=0.47 Out=0.91
+  target-only + balanced     段级acc=0.7852 f1=0.7237 硬=0.9286 软=0.8929  Nor=0.51 Bal=0.90 Inn=0.58 Out=0.86
+  source+target              段级acc=0.7287 f1=0.7147 硬=0.7857 软=0.7857  Nor=0.92 Bal=0.66 Inn=0.33 Out=0.90
+  zero-label 不对齐             段级acc=0.4690 f1=0.3152 硬=0.5714 软=0.5714  Nor=0.94 Bal=0.00 Inn=0.18 Out=0.73
+  zero-label 一阶对齐(全FE统计)     段级acc=0.4012 f1=0.2150 硬=0.4286 软=0.4286  Nor=0.03 Bal=0.02 Inn=0.17 Out=0.72
+  zero-label 一阶对齐(eval统计)    段级acc=0.3578 f1=0.1837 硬=0.3214 软=0.3214  Nor=0.00 Bal=0.03 Inn=0.13 Out=0.64
+
+--- vmdstats 汇总（4 seed 均值±样本SD）
+  source_target        lr=0.3   段级 0.6277±0.0554  f1 0.5985  记录硬 0.7054  记录软 0.7054  Nor=0.89±0.07 Bal=0.45±0.11 Inn=0.24±0.08 Out=0.84±0.11
+  source_target        lr=0.6   段级 0.7091±0.0421  f1 0.7042  记录硬 0.8214  记录软 0.8214  Nor=0.90±0.07 Bal=0.65±0.08 Inn=0.41±0.15 Out=0.84±0.05
+  source_target        lr=0.99  段级 0.7276±0.0527  f1 0.7354  记录硬 0.8125  记录软 0.8214  Nor=0.92±0.03 Bal=0.73±0.09 Inn=0.48±0.18 Out=0.81±0.17
+  target_only          lr=0.3   段级 0.5823±0.1173  f1 0.5420  记录硬 0.5893  记录软 0.5893  Nor=0.65±0.25 Bal=0.52±0.32 Inn=0.26±0.07 Out=0.74±0.17
+  target_only          lr=0.6   段级 0.7220±0.0377  f1 0.6882  记录硬 0.7857  记录软 0.7768  Nor=0.75±0.18 Bal=0.80±0.12 Inn=0.43±0.20 Out=0.81±0.07
+  target_only          lr=0.99  段级 0.7719±0.0575  f1 0.7458  记录硬 0.8304  记录软 0.8304  Nor=0.77±0.19 Bal=0.83±0.06 Inn=0.57±0.20 Out=0.84±0.20
+  target_only_balanced lr=0.3   段级 0.5744±0.1156  f1 0.5406  记录硬 0.5804  记录软 0.5893  Nor=0.67±0.27 Bal=0.56±0.32 Inn=0.27±0.07 Out=0.70±0.16
+  target_only_balanced lr=0.6   段级 0.7134±0.0295  f1 0.6875  记录硬 0.7768  记录软 0.7768  Nor=0.80±0.20 Bal=0.83±0.12 Inn=0.46±0.21 Out=0.76±0.07
+  target_only_balanced lr=0.99  段级 0.7702±0.0671  f1 0.7513  记录硬 0.8839  记录软 0.8839  Nor=0.82±0.21 Bal=0.86±0.07 Inn=0.63±0.18 Out=0.79±0.21
+  zero_label_align_all lr=0.3   段级 0.4173±0.0286  f1 0.2547  记录硬 0.4464  记录软 0.4286  Nor=0.06±0.04 Bal=0.06±0.05 Inn=0.23±0.07 Out=0.69±0.04
+  zero_label_align_all lr=0.6   段级 0.4173±0.0286  f1 0.2547  记录硬 0.4464  记录软 0.4286  Nor=0.06±0.04 Bal=0.06±0.05 Inn=0.23±0.07 Out=0.69±0.04
+  zero_label_align_all lr=0.99  段级 0.4173±0.0286  f1 0.2547  记录硬 0.4464  记录软 0.4286  Nor=0.06±0.04 Bal=0.06±0.05 Inn=0.23±0.07 Out=0.69±0.04
+  zero_label_align_eval lr=0.3   段级 0.3964±0.0420  f1 0.2400  记录硬 0.3750  记录软 0.3750  Nor=0.02±0.03 Bal=0.10±0.08 Inn=0.23±0.07 Out=0.64±0.04
+  zero_label_align_eval lr=0.6   段级 0.3964±0.0420  f1 0.2400  记录硬 0.3750  记录软 0.3750  Nor=0.02±0.03 Bal=0.10±0.08 Inn=0.23±0.07 Out=0.64±0.04
+  zero_label_align_eval lr=0.99  段级 0.3964±0.0420  f1 0.2400  记录硬 0.3750  记录软 0.3750  Nor=0.02±0.03 Bal=0.10±0.08 Inn=0.23±0.07 Out=0.64±0.04
+  zero_label_raw       lr=0.3   段级 0.4790±0.0215  f1 0.3279  记录硬 0.5714  记录软 0.5714  Nor=0.98±0.03 Bal=0.00±0.00 Inn=0.22±0.08 Out=0.73±0.05
+  zero_label_raw       lr=0.6   段级 0.4790±0.0215  f1 0.3279  记录硬 0.5714  记录软 0.5714  Nor=0.98±0.03 Bal=0.00±0.00 Inn=0.22±0.08 Out=0.73±0.05
+  zero_label_raw       lr=0.99  段级 0.4790±0.0215  f1 0.3279  记录硬 0.5714  记录软 0.5714  Nor=0.98±0.03 Bal=0.00±0.00 Inn=0.22±0.08 Out=0.73±0.05
+
+[产物] 划分文件键已写入 docs/evidence/E22_protocol_probe_keys.json
+DONE_E22

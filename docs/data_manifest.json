@@ -1,0 +1,397 @@
+{
+  "n_files": 56,
+  "files": {
+    "12k_DE/B007_0.mat": {
+      "bytes": 2942112,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B007_1.mat": {
+      "bytes": 2914248,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B007_2.mat": {
+      "bytes": 2917752,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B007_3.mat": {
+      "bytes": 2917752,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B014_0.mat": {
+      "bytes": 2924712,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B014_1.mat": {
+      "bytes": 2931672,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B014_2.mat": {
+      "bytes": 2928192,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B014_3.mat": {
+      "bytes": 2931672,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B021_0.mat": {
+      "bytes": 2928192,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B021_1.mat": {
+      "bytes": 2921232,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B021_2.mat": {
+      "bytes": 2931672,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/B021_3.mat": {
+      "bytes": 2931672,
+      "label": 1,
+      "label_letter": "B",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR007_0.mat": {
+      "bytes": 2910768,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR007_1.mat": {
+      "bytes": 2928192,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR007_2.mat": {
+      "bytes": 2931672,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR007_3.mat": {
+      "bytes": 2950416,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR014_0.mat": {
+      "bytes": 2924712,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR014_1.mat": {
+      "bytes": 2924712,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR014_2.mat": {
+      "bytes": 2924712,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR014_3.mat": {
+      "bytes": 2921232,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR021_0.mat": {
+      "bytes": 2931672,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR021_1.mat": {
+      "bytes": 2917752,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR021_2.mat": {
+      "bytes": 2924712,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/IR021_3.mat": {
+      "bytes": 2928192,
+      "label": 2,
+      "label_letter": "IR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@12_0.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@12_1.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@12_2.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@12_3.mat": {
+      "bytes": 2931672,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@3_0.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@3_1.mat": {
+      "bytes": 2924712,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@3_2.mat": {
+      "bytes": 2917752,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@3_3.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@6_0.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@6_1.mat": {
+      "bytes": 2938632,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@6_2.mat": {
+      "bytes": 2914248,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR007@6_3.mat": {
+      "bytes": 2942112,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR014@6_0.mat": {
+      "bytes": 2924712,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR014@6_1.mat": {
+      "bytes": 2931672,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR014@6_2.mat": {
+      "bytes": 2924712,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR014@6_3.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@12_0.mat": {
+      "bytes": 2924712,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@12_1.mat": {
+      "bytes": 2938632,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@12_2.mat": {
+      "bytes": 2945592,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@12_3.mat": {
+      "bytes": 2921232,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@3_0.mat": {
+      "bytes": 2921232,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@3_1.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@3_2.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@3_3.mat": {
+      "bytes": 2931672,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@6_0.mat": {
+      "bytes": 2938632,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@6_1.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@6_2.mat": {
+      "bytes": 2935152,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "12k_DE/OR021@6_3.mat": {
+      "bytes": 2928192,
+      "label": 3,
+      "label_letter": "OR",
+      "dataset": "12k_DE",
+      "raw_fs": 12000
+    },
+    "Normal/Normal_0.mat": {
+      "bytes": 3903344,
+      "label": 0,
+      "label_letter": "N",
+      "dataset": "Normal",
+      "raw_fs": 48000
+    },
+    "Normal/Normal_1.mat": {
+      "bytes": 7742720,
+      "label": 0,
+      "label_letter": "N",
+      "dataset": "Normal",
+      "raw_fs": 48000
+    },
+    "Normal/Normal_2.mat": {
+      "bytes": 15503928,
+      "label": 0,
+      "label_letter": "N",
+      "dataset": "Normal",
+      "raw_fs": 48000
+    },
+    "Normal/Normal_3.mat": {
+      "bytes": 7770624,
+      "label": 0,
+      "label_letter": "N",
+      "dataset": "Normal",
+      "raw_fs": 48000
+    }
+  }
+}

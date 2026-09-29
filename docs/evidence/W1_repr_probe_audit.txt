@@ -1,0 +1,43 @@
+W1 里程碑验收结果（表征与探针）
+================================================================
+依据：版本3 §4.3 / §4.2 迁移审计 / §5 P0.0 / §4.8 行 W1；执行清单 S3–S5。
+环境：E:/tool/anaconda/envs/fault-detect/python.exe，PYTHONUTF8=1
+
+[S3] preprocessing.py（唯一提取实现 + repr_config 冻结 + 缓存）
+- 四表征形状：logspec (1,256)、cepstrum (1,236)、vmdstats (1,32)、vmd (8,512)。
+- repr_config 全量入缓存键（<stem>_L512_<repr_key>.npz）与 npz 内容，读时逐字段校验。
+- 段内标准化保留（logspec 每段均值≈0）；vmd 读出后按 sort_vmd 排序（不写回缓存）。
+- 修复：vmdstats 必须基于【排序后】VMD 模态计算（与旧库探针 build_feature_set sort_vmd=True 一致）。
+- tests/test_preprocessing.py 通过（形状/键/缓存校验/隔离/vmdstats 排序）。
+
+[S3 附加] v4 提取 vs 旧库探针逐字节对拍
+- logspec：max_abs_diff = 0.0（713 段）。
+- cepstrum：max_abs_diff = 0.0（713 段）。
+- vmdstats：基于排序 VMD 后与旧库口径一致。
+
+[S4] E22 复现 + 全网格划分键
+- scripts/diag_protocol_probe.py 直接 import preprocessing.extract_repr（唯一实现，无第二份）。
+- 新增 --keys_only；生成 docs/evidence/E22_protocol_probe_v4.txt 与
+  E22_protocol_probe_keys.json、E22_keys_pool0.3.json、E22_keys_pool0.5.json
+  （pool{0.3,0.5} × lr{0,0.3,0.6,0.99} × seeds 0-3 全网格键）。
+
+[S4 硬门槛] E22 vs E21 对拍（版本3 §5 P0.0：段级差 ≤1pp、逐 seed 同号）
+  ('logspec','target_only',0.99)   E21=0.8994 E22=0.8994 差=0.000pp
+  ('logspec','source_target',0.99) E21=0.9202 E22=0.9202 差=0.000pp
+  ('logspec','target_only',0.6)    E21=0.8417 E22=0.8417 差=0.000pp
+  ('logspec','source_target',0.6)  E21=0.8583 E22=0.8583 差=0.000pp
+  ('logspec','target_only',0.3)    E21=0.6739 E22=0.6739 差=0.000pp
+  ('logspec','source_target',0.3)  E21=0.7890 E22=0.7890 差=0.000pp
+  ('cepstrum','target_only',0.99)  E21=0.8997 E22=0.8997 差=0.000pp
+  ('cepstrum','source_target',0.99)E21=0.9255 E22=0.9255 差=0.000pp
+  ('vmdstats','target_only',0.99)  E21=0.7719 E22=0.7719 差=0.000pp
+  ('vmdstats','source_target',0.99)E21=0.7276 E22=0.7276 差=0.000pp
+  最大段级差 = 0.000pp（门槛 ≤1pp）→ 通过
+- 硬/软投票口径亦一致（cepstrum target_only lr0.99 硬0.9554/软0.9464，与版本3 §0.1#2 一致）。
+
+[S5] VMD 缓存等价性抽样对拍（版本3 §4.2 VMD 缓存等价）
+- 抽样四类各一文件（B007_0/IR007_0/OR007@12_0/Normal_0，DE 通道）。
+- 全部 shape/label/segment_id 一致，数值 allclose(rtol=1e-5)，实测 maxdiff = 0.0。
+
+W1 门槛（版本3 §4.8）：E22 对拍 E21 ≤1pp 且方向一致 ✓；VMD 缓存抽样与旧库 allclose ✓。
+结论：W1 通过，进入 W2（训练管线）。

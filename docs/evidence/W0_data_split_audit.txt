@@ -1,0 +1,26 @@
+W0 里程碑验收结果（数据与划分）
+================================================================
+依据：版本3 §4.2 / §4.8 行 W0；执行清单 S0–S2。
+环境：E:/tool/anaconda/envs/fault-detect/python.exe，PYTHONUTF8=1
+工作目录：rbop_diagnosis_v4/
+
+[S1] 数据迁移 + 清单校验
+- Data/ 从 ../rbop_diagnosis/Data 整体复制，657 MB。
+- 目录计数：12k_DE 60、12k_FE 45、48k_DE 52、Normal 4（共 161 .mat）。
+- docs/data_manifest.json 生成，56 文件字节数与旧库逐一致（对拍通过）。
+
+[S2] dataset.py + 划分等价 + 段统计
+- enumerate_t1_files：56 记录，四类 {Normal:4, Ball:12, InnerRace:12, OuterRace:28}。
+- build_t1_segments(DE, 512)：13191 段，fs=12000，段长 512 不重叠。
+- 12k_DE 全部 028 已排除；每文件 DE/FE 成对。
+
+[S2 硬门槛] 128 run 划分等价审计
+- v4 split_target_files 复算 ../rbop_diagnosis/runs/paired/results.json 全 128 run。
+- 比对字段：target_labeled_keys / target_eval_keys / target_label_pool_keys / target_unused_keys。
+- 结果：已核对 128 个 run，0 不一致。通过。
+
+[测试] tests/test_dataset.py
+- Ran 10 tests ... OK（含 TestSplitEquivalence128Run.test_all_128_runs_equivalent）。
+
+W0 门槛（版本3 §4.8）：56 记录且 DE/FE 成对 ✓；128 run 划分键 0 不一致 ✓；DE 共 13191 段 ✓。
+结论：W0 通过，进入 W1（表征与探针）。

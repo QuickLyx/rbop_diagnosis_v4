@@ -1,0 +1,10 @@
+[汇总] split_mode=paired  共 68 run
+
+配置                                                   n  段级均值±SD      记录硬均值   macro-F1
+cepstrum|semi_supervised|0.99|0.3                    4  0.9445±0.0621   0.9643      0.9583
+logspec|semi_supervised|0.3|0.3                      4  0.8470±0.0842   0.8750      0.8719
+logspec|semi_supervised|0.6|0.3                      4  0.9530±0.0688   0.9643      0.9650
+logspec|semi_supervised|0.99|0.0                     4  0.9362±0.0309   0.9821      0.9455
+logspec|semi_supervised|0.99|0.3                     44 0.9556±0.0647   0.9727      0.9629
+logspec|target_only|0.99|0.0                         4  0.8868±0.0795   0.8839      0.9057
+vmd|semi_supervised|0.99|0.3                         4  0.8147±0.0801   0.8482      0.7812
